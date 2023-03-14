@@ -22,7 +22,7 @@
 	<p id="reversed-text">{reverse}</p>
 
 	<div class="portal-box">
-		<a href="/" class="freelancer"><span>Freelancer Portal</span></a>
+		<a href="/" class="freelancer"><span>Something Cringe</span></a>
 		<a href="/" class="manager"><span>Manager Portal</span></a>
 	</div>
 </section>
