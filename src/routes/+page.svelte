@@ -9,7 +9,7 @@
 </svelte:head>
 
 <section>
-	<h1>Welcome to Staffer!</h1>
+	<h1 class="text-3xl bg-yellow-500 hover:bg-blue-500 transition-all">Welcome to Staffer!</h1>
 	<span
 		>If you found this, congratulations! We're currently in early development and have no working
 		functionality.</span
