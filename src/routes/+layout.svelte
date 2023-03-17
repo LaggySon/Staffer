@@ -4,7 +4,7 @@
 	import '../app.css';
 </script>
 
-<div class="app font-JosefinSans">
+<div class="app font-JosefinSans dark:bg-slate-700 dark:text-white">
 	<Header />
 
 	<main>
