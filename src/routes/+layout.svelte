@@ -1,10 +1,10 @@
 <script>
 	import Header from './Header.svelte';
-	import './styles.css';
+
 	import '../app.css';
 </script>
 
-<div class="app">
+<div class="app font-JosefinSans dark:bg-slate-700 dark:text-white">
 	<Header />
 
 	<main>
@@ -12,7 +12,7 @@
 	</main>
 
 	<footer>
-		<p>made with <a href="https://kit.svelte.dev">SvelteKit</a></p>
+		<p>Michael Richards and Danny Dang</p>
 	</footer>
 </div>
 

@@ -2,7 +2,11 @@
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {}
+		extend: {
+			fontFamily: {
+				JosefinSans: ['Josefin Sans', 'sans-serif']
+			}
+		}
 	},
 	plugins: []
 };
