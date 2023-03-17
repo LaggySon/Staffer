@@ -8,58 +8,44 @@
 	<meta name="description" content="Efficient and effective event staffing" />
 </svelte:head>
 
-<section>
-	<h1 class="text-3xl bg-yellow-500 hover:bg-blue-500 transition-all">Welcome to Staffer!</h1>
-	<span
-		>If you found this, congratulations! We're currently in early development and have no working
-		functionality.</span
-	>
-	<span
-		>So I guess just hang out here and refresh the page every once in a while, I'm sure something
-		will show up eventually :)</span
-	>
-	<input style="text-align:center;" type="text" bind:value={word} placeholder="reverse some text" />
-	<p id="reversed-text">{reverse}</p>
-
-	<div class="portal-box">
-		<a href="/" class="freelancer"><span>Something Cringe</span></a>
-		<a href="/" class="manager"><span>Manager Portal</span></a>
+<body class="text-center my-auto">
+	<h1 class="text-3xl lg:text-7xl  transition-all text-center">Welcome to Staffer!</h1>
+	<!-- <div class="my-20">
+		<p>
+			If you found this, congratulations! We're currently in early development and have no working
+			functionality.
+		</p>
+		<p>
+			So I guess just hang out here and refresh the page every once in a while, I'm sure something
+			will show up eventually :)
+		</p>
 	</div>
-</section>
+	<input
+		class="text-center w-full text-blue-400 focus-within:outline-transparent border-solid border-b-black outline-transparent outline-none"
+		type="text"
+		bind:value={word}
+		placeholder="reverse some text"
+	/>
+	<p class="h-[1em] text-red-400">{reverse}</p> -->
+
+	<div class="portal-box mt-4">
+		<a href="/freelancer" class="freelancer bg-blue-400 before:bg-blue-400"
+			><span>Freelancer Portal</span></a
+		>
+		<a href="/manager" class="manager  bg-red-400 before:bg-red-400"><span>Manager Portal</span></a>
+	</div>
+
+	<div class=" my-20">
+		<p class="text-xl lg:text-3xl font-bold">Say Goodbye To</p>
+		<ul class="lg:text-xl">
+			<li>Disorganized Spreadsheets</li>
+			<li>Double Bookings</li>
+			<li>No-Call No-Shows</li>
+		</ul>
+	</div>
+</body>
 
 <style lang="scss">
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	span {
-		padding-block: 0.5rem;
-	}
-	input[type='text'] {
-		margin-top: 1rem;
-		border: none;
-		border-bottom: 1px solid var(--color-text);
-		background-color: transparent;
-		color: var(--color-theme-1);
-	}
-	input[type='text']:focus {
-		border: none;
-		border-bottom: 1px solid var(--color-text);
-		outline: none;
-	}
-	#reversed-text {
-		height: 1em;
-		color: var(--color-theme-2);
-	}
-
 	.portal-box {
 		outline: 2px solid black;
 		color: white;
@@ -86,8 +72,6 @@
 		}
 
 		.freelancer {
-			background-color: var(--color-theme-1);
-
 			&::before {
 				transition: all 250ms;
 				width: 0%;
@@ -95,7 +79,6 @@
 				position: absolute;
 				height: 100%;
 				z-index: 1;
-				background-color: var(--color-theme-1);
 				margin-left: 100%;
 			}
 			&:hover {
@@ -110,8 +93,6 @@
 			}
 		}
 		.manager {
-			background-color: var(--color-theme-2);
-
 			&::before {
 				transition: all 250ms;
 				width: 0%;
@@ -119,7 +100,6 @@
 				position: absolute;
 				height: 100%;
 				z-index: 1;
-				background-color: var(--color-theme-2);
 				margin-right: 100%;
 			}
 			&:hover {
