@@ -9,7 +9,7 @@
 </svelte:head>
 
 <body class="text-center my-auto">
-	<h1 class="text-3xl lg:text-7xl  transition-all text-center">Welcome to Staffer!</h1>
+	<h1 class="text-3xl lg:text-7xl  transition-all text-center mb-4">Welcome to Staffer!</h1>
 	<!-- <div class="my-20">
 		<p>
 			If you found this, congratulations! We're currently in early development and have no working
@@ -27,12 +27,13 @@
 		placeholder="reverse some text"
 	/>
 	<p class="h-[1em] text-red-400">{reverse}</p> -->
+	<p class="text-lg lg:text-3xl">I am a...</p>
 
-	<div class="portal-box mt-4 lg:text-3xl text-xl">
+	<div class="portal-box  lg:text-3xl text-xl">
 		<a href="/freelancer" class="freelancer bg-blue-400 before:bg-blue-400"
-			><span>Freelancer Portal</span></a
+			><span>Freelancer</span></a
 		>
-		<a href="/manager" class="manager  bg-red-400 before:bg-red-400"><span>Manager Portal</span></a>
+		<a href="/manager" class="manager  bg-red-400 before:bg-red-400"><span>Manager</span></a>
 	</div>
 
 	<div class=" my-20 transition-all">

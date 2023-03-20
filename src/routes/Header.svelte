@@ -6,7 +6,7 @@
 
 <header class="flex justify-between">
 	<div class="h-10 w-10 hover:bg-blue-400 hover:text-white transition-all hover:rounded-br-lg">
-		<Github />
+		<a href="https://github.com/LaggySon/staffer"> <Github /></a>
 	</div>
 	<nav>
 		<ul class="flex gap-1">
