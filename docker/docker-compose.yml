@@ -1,8 +1,8 @@
-version: "3"
+version: '3'
 
 services:
   database:
-    image: "postgres:latest"
+    image: 'postgres:latest'
     ports:
       - 15432:5432
     env_file:
@@ -29,3 +29,6 @@ services:
 networks:
   postgres-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
