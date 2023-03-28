@@ -2,73 +2,73 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
-	const alice = await prisma.user.upsert({
-		where: { email: 'alice@prisma.io' },
+// async function main() {
+// 	const alice = await prisma.user.upsert({
+// 		where: { email: 'alice@prisma.io' },
 
-		update: {},
+// 		update: {},
 
-		create: {
-			email: 'alice@prisma.io',
+// 		create: {
+// 			email: 'alice@prisma.io',
 
-			name: 'Alice',
+// 			name: 'Alice',
 
-			posts: {
-				create: {
-					title: 'Check out Prisma with Next.js',
+// 			posts: {
+// 				create: {
+// 					title: 'Check out Prisma with Next.js',
 
-					content: 'https://www.prisma.io/nextjs',
+// 					content: 'https://www.prisma.io/nextjs',
 
-					published: true
-				}
-			}
-		}
-	});
+// 					published: true
+// 				}
+// 			}
+// 		}
+// 	});
 
-	const bob = await prisma.user.upsert({
-		where: { email: 'bob@prisma.io' },
+// 	const bob = await prisma.user.upsert({
+// 		where: { email: 'bob@prisma.io' },
 
-		update: {},
+// 		update: {},
 
-		create: {
-			email: 'bob@prisma.io',
+// 		create: {
+// 			email: 'bob@prisma.io',
 
-			name: 'Bob',
+// 			name: 'Bob',
 
-			posts: {
-				create: [
-					{
-						title: 'Follow Prisma on Twitter',
+// 			posts: {
+// 				create: [
+// 					{
+// 						title: 'Follow Prisma on Twitter',
 
-						content: 'https://twitter.com/prisma',
+// 						content: 'https://twitter.com/prisma',
 
-						published: true
-					},
+// 						published: true
+// 					},
 
-					{
-						title: 'Follow Nexus on Twitter',
+// 					{
+// 						title: 'Follow Nexus on Twitter',
 
-						content: 'https://twitter.com/nexusgql',
+// 						content: 'https://twitter.com/nexusgql',
 
-						published: true
-					}
-				]
-			}
-		}
-	});
+// 						published: true
+// 					}
+// 				]
+// 			}
+// 		}
+// 	});
 
-	console.log({ alice, bob });
-}
+// 	console.log({ alice, bob });
+// }
 
-main()
-	.then(async () => {
-		await prisma.$disconnect();
-	})
+// main()
+// 	.then(async () => {
+// 		await prisma.$disconnect();
+// 	})
 
-	.catch(async (e) => {
-		console.error(e);
+// 	.catch(async (e) => {
+// 		console.error(e);
 
-		await prisma.$disconnect();
+// 		await prisma.$disconnect();
 
-		process.exit(1);
-	});
+// 		process.exit(1);
+// 	});

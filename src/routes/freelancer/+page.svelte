@@ -16,9 +16,11 @@
 	}
 </script>
 
+{#if $page?.data?.session?.user?.image}
+	<img src={$page?.data?.session?.user?.image} alt="" height="100" width="100" class="mx-auto" />
+{/if}
 <h1 class="text-center text-3xl">Welcome, {$page?.data?.session?.user?.name ?? 'Freelancer'}!</h1>
-<p class="text-center">Here you can...</p>
-<ul class="text-center my-auto">
+<ul class="text-center">
 	{#if !$page.data.session}
 		<li class="m-4">
 			<button
