@@ -3,6 +3,8 @@ import Discord from '@auth/core/providers/discord';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { DISCORD_ID, DISCORD_SECRET, SVELTEAUTH_SECRET } from '$env/static/private';
 import { PrismaClient } from '@prisma/client';
+import { page } from '$app/stores';
+import { get } from 'svelte/store';
 
 const prisma = new PrismaClient();
 
@@ -29,6 +31,12 @@ export const handle = SvelteKitAuth({
 		// need a more customized session token string, you can define your own generate function.
 		generateSessionToken: () => {
 			return crypto.randomUUID();
+		}
+	},
+	callbacks: {
+		session({ session, user }) {
+			session.user.role = user.role;
+			return session;
 		}
 	},
 	providers: [Discord({ clientId: DISCORD_ID, clientSecret: DISCORD_SECRET })],
