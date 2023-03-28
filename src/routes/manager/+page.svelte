@@ -7,7 +7,7 @@
 
 <h1 class="text-center">Manager Portal</h1>
 {#if $page.data.session}
-	<p>Hello {page.data.session.user?.name ?? 'User'}</p>
+	<p class="text-center text-3xl">Hello {$page.data.session.user?.name ?? 'User'}</p>
 	<button on:click={() => signOut()}>Sign Out</button>
 {:else}
 	<button on:click={() => signIn('discord')}>Sign In</button>

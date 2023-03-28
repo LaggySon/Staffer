@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { signIn, signOut } from '@auth/sveltekit/client';
+	import { page } from '$app/stores';
+
 	let orgs = ['Organization 1', 'Organization 2', 'Organization b'];
 	let session = false;
 	let joinCode = '';
@@ -13,30 +16,17 @@
 	}
 </script>
 
-<h1 class="text-center text-3xl">Welcome, Freelancer!</h1>
+<h1 class="text-center text-3xl">Welcome, {$page?.data?.session?.user?.name ?? 'Freelancer'}!</h1>
 <p class="text-center">Here you can...</p>
 <ul class="text-center my-auto">
-	<li class="m-4">
-		<form action="post">
-			<label class="text-lg" for="orgcode">Join an Organization</label>
-			<br />
-			<input
-				class="bg-transparent border"
-				type="text"
-				name="orgcode"
-				id="orgcode"
-				bind:value={joinCode}
-			/>
-			<br />
-			<button class="bg-transparent border p-2 m-2" on:click|preventDefault={joinOrg}>Join</button>
-		</form>
-	</li>
-	{#if !session}
+	{#if !$page.data.session}
 		<li class="m-4">
-			<button on:click|preventDefault={login} class="bg-blue-400 p-2">Log In</button>
-		</li>
-		<li class="m-4">
-			<button class="bg-red-400 p-2">Sign up</button>
+			<button
+				on:click|preventDefault={() => {
+					signIn('discord');
+				}}
+				class="bg-blue-400 p-2">Sign In</button
+			>
 		</li>
 	{:else}
 		<p>Go to...</p>
@@ -44,8 +34,17 @@
 			{#each orgs as org}
 				<li class="bg-blue-400 p-2 m-2 max-w-lg mx-auto"><a href="/events">{org}</a></li>
 			{/each}
+			<input
+				class="bg-transparent border"
+				type="text"
+				name="orgcode"
+				id="orgcode"
+				bind:value={joinCode}
+			/>
+
+			<button class="bg-transparent border p-2 m-2" on:click|preventDefault={joinOrg}>Join</button>
 			<li class="m-4">
-				<button on:click|preventDefault={login} class="bg-red-400 p-2">Log Out</button>
+				<button on:click|preventDefault={() => signOut()} class="bg-red-400 p-2">Sign Out</button>
 			</li>
 		</ul>
 	{/if}
