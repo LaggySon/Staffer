@@ -27,7 +27,7 @@
 				on:click|preventDefault={() => {
 					signIn('discord');
 				}}
-				class="bg-blue-400 p-2">Sign In</button
+				class="bg-blue-400 p-2  w-32 hover:rounded-lg transition-all">Sign In</button
 			>
 		</li>
 	{:else}
@@ -46,7 +46,10 @@
 
 			<button class="bg-transparent border p-2 m-2" on:click|preventDefault={joinOrg}>Join</button>
 			<li class="m-4">
-				<button on:click|preventDefault={() => signOut()} class="bg-red-400 p-2">Sign Out</button>
+				<button
+					on:click|preventDefault={() => signOut()}
+					class="bg-red-400 p-2 text-center w-32 hover:rounded-lg transition-all">Sign Out</button
+				>
 			</li>
 		</ul>
 	{/if}
