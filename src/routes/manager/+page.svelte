@@ -5,22 +5,35 @@
 	export let data;
 </script>
 
-<h1 class="text-center">Manager Portal</h1>
-{#if $page.data.session}
-	<p class="text-center text-3xl">Hello {$page.data.session.user?.name ?? 'User'}</p>
-	<!-- <p>{$page?.data.session.user?.role}</p> -->
-	<button on:click={() => signOut()}>Sign Out</button>
+<p class="text-center text-3xl">Hello, {$page.data?.session?.user?.name ?? 'Manager'}!</p>
+<!-- <p>{$page?.data.session.user?.role}</p> -->{#if $page.data.session}
+	<button
+		on:click|preventDefault={() => signOut()}
+		class="bg-red-400 p-2 text-center mx-auto my-4 w-32 hover:rounded-lg transition-all"
+		>Sign Out</button
+	>
 {:else}
-	<button on:click={() => signIn('discord')}>Sign In</button>
+	<button
+		on:click|preventDefault={() => {
+			signIn('discord');
+		}}
+		class="bg-blue-400 p-2  mx-auto my-4 w-32 hover:rounded-lg transition-all">Sign In</button
+	>
 {/if}
 <div class="flex justify-center items-center gap-2">
 	{#if $page?.data?.session?.user?.role === 'admin'}
 		{#each data.users as user}
-			<div class="border text-center p-2">
+			<form method="POST" action="?/changeRole" class="border text-center p-2">
 				<p class="font-bold">{user.name}#{user.id}</p>
 				<p>({user.email})</p>
-				<p>{user.role}</p>
-			</div>
+				<input
+					class="bg-transparent text-center border focus:rounded-lg outline-none transition-all"
+					type="text"
+					name="role"
+					value={user.role}
+				/>
+				<input type="hidden" name="userId" value={user.id} />
+			</form>
 		{/each}
 	{/if}
 </div>

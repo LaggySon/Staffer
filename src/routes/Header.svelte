@@ -18,6 +18,6 @@
 		</ul>
 	</nav>
 	<div class="h-10 w-10 p-1 hover:bg-blue-400 hover:text-white transition-all hover:rounded-bl-lg">
-		<Profile />
+		<a href="/freelancer"><Profile /></a>
 	</div>
 </header>
