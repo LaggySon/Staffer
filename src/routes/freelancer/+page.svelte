@@ -36,15 +36,17 @@
 			{#each orgs as org}
 				<li class="bg-blue-400 p-2 m-2 max-w-lg mx-auto"><a href="/events">{org}</a></li>
 			{/each}
-			<input
-				class="bg-transparent border"
-				type="text"
-				name="orgcode"
-				id="orgcode"
-				bind:value={joinCode}
-			/>
+			<form action="?/join" method="POST">
+				<input
+					class="bg-transparent border"
+					type="text"
+					name="orgCode"
+					id="orgcode"
+					bind:value={joinCode}
+				/>
 
-			<button class="bg-transparent border p-2 m-2" on:click|preventDefault={joinOrg}>Join</button>
+				<input class="bg-transparent border p-2 m-2" type="submit" value="Join" />
+			</form>
 			<li class="m-4">
 				<button
 					on:click|preventDefault={() => signOut()}
