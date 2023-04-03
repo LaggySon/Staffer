@@ -22,6 +22,7 @@ export const load = async ({ parent }) => {
 		const orgsList: any = [];
 		return { orgsList };
 	}
+
 };
 
 export const actions = {
