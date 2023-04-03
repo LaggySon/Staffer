@@ -2,18 +2,10 @@
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
 
-	let orgs = ['Organization 1', 'Organization 2', 'Organization b'];
-	let session = false;
-	let joinCode = '';
+	let joinCode: string;
 
-	function login() {
-		session = !session;
-	}
-
-	function joinOrg() {
-		orgs = [...orgs, joinCode];
-		joinCode = '';
-	}
+	export let data;
+	const orgs = data.orgsList;
 </script>
 
 {#if $page?.data?.session?.user?.image}
@@ -34,17 +26,23 @@
 		<p>Go to...</p>
 		<ul>
 			{#each orgs as org}
-				<li class="bg-blue-400 p-2 m-2 max-w-lg mx-auto"><a href="/events">{org}</a></li>
+				<li class="bg-blue-400 p-2 m-2 max-w-lg mx-auto hover:rounded-lg transition-all">
+					<a href={`/orgs/${org?.name}`} class="flex items-center justify-center gap-2"
+						><img src={org?.logo} alt="" class="h-[2em]" /><span>{org?.name}</span></a
+					>
+				</li>
 			{/each}
-			<input
-				class="bg-transparent border"
-				type="text"
-				name="orgcode"
-				id="orgcode"
-				bind:value={joinCode}
-			/>
+			<form action="?/join" method="POST">
+				<input
+					class="bg-transparent border"
+					type="text"
+					name="orgCode"
+					id="orgcode"
+					bind:value={joinCode}
+				/>
 
-			<button class="bg-transparent border p-2 m-2" on:click|preventDefault={joinOrg}>Join</button>
+				<input class="bg-transparent border p-2 m-2" type="submit" value="Join" />
+			</form>
 			<li class="m-4">
 				<button
 					on:click|preventDefault={() => signOut()}

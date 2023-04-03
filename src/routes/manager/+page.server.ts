@@ -10,7 +10,7 @@ export const load = async () => {
 };
 
 export const actions = {
-	changeRole: async ({ request }) => {
+	changeRole: async ({ request: any }) => {
 		const data = await request.formData();
 
 		const userId = String(data.get('userId'));
