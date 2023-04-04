@@ -22,29 +22,50 @@ export const load = async ({ parent }) => {
 		const orgsList: any = [];
 		return { orgsList };
 	}
-
 };
 
 export const actions = {
-	join: async ({ request }) => {
+	join: async ({ request }: any) => {
+		console.log('what');
 		const data = await request.formData();
-		const userId = data.get('userId');
-		const org = data.get('orgCode') ?? '';
+		const userEmail = data.get('userEmail');
+		const orgId = data.get('orgCode') ?? '';
 
-		// const organization = await prisma.organization.update({
-		// 	where: {
-		// 		id: String(org)
-		// 	},
-		//     data: {
-		//         freelancers:{
-		//             push:{
+		const orgToAdd = await prisma.organization.findFirst({
+			where: {
+				id: String(orgId)
+			}
+		});
 
-		//             }
-		//         }
-		//     }
-		// });
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
 
-		// if (organization) {
-		// }
+		if (orgToAdd) {
+			const addUser = await prisma.orgOnFreelancer.upsert({
+				where: {
+					organizationId_userId: {
+						organizationId: String(orgId),
+						userId: String(userId)
+					}
+				},
+				update: {},
+				create: {
+					organization: {
+						connect: {
+							id: String(orgId)
+						}
+					},
+					user: {
+						connect: {
+							id: String(userId)
+						}
+					}
+				}
+			});
+		}
 	}
 };
