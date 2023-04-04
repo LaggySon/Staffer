@@ -40,7 +40,7 @@
 					id="orgcode"
 					bind:value={joinCode}
 				/>
-
+				<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
 				<input class="bg-transparent border p-2 m-2" type="submit" value="Join" />
 			</form>
 			<li class="m-4">

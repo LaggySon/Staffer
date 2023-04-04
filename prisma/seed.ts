@@ -72,6 +72,58 @@ async function main() {
 			}
 		}
 	});
+	const wit2 = await prisma.organization.upsert({
+		where: { name: 'Wentworth2' },
+		update: {},
+		create: {
+			name: 'Wentworth2',
+			logo: 'https://www.ncaa.com/sites/default/files/images/logos/schools/bgd/wentworth.svg',
+			description: 'Wentworth Institute of Technology',
+			contactInfo: 'Huntington Ave',
+			socials: {
+				create: [
+					{
+						site: 'Twitter',
+						handle: '@WIT'
+					}
+				]
+			},
+			events: {
+				create: [
+					{
+						name: 'Semi Finals',
+						location: 'Tansey Gym',
+						positions: {
+							create: [
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								}
+							]
+						},
+						date: new Date()
+					},
+					{
+						name: 'Grand Finals',
+						location: 'Tansey Gym',
+						positions: {
+							create: [
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								}
+							]
+						},
+						date: new Date()
+					}
+				]
+			},
+			freelancers: {},
+			managers: {}
+		}
+	});
 }
 
 main()
