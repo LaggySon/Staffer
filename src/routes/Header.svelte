@@ -11,7 +11,7 @@
 	<nav>
 		<ul class="flex gap-1">
 			<li
-				class=" bg-gray-300 p-2 font-bold text-lg text-gray-700 hover:bg-red-400 hover:text-white transition-all hover:rounded-b-lg"
+				class=" bg-gray-300 p-2 font-bold text-lg text-gray-700 hover:text-white hover:bg-red-400  transition-all hover:rounded-b-lg"
 			>
 				<a href="/">Staffer</a>
 			</li>
