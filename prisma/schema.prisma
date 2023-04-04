@@ -52,6 +52,8 @@ model User {
   positions     Position[]
   freelancerOf  OrgOnFreelancer[]
   managerOf     OrgOnManager[]
+
+  UserOnPosition UserOnPosition[]
 }
 
 model VerificationToken {
@@ -93,14 +95,15 @@ model Event {
 }
 
 model Position {
-  id           String  @id @default(cuid())
-  title        String
-  compensation String
-  filled       Boolean
-  filledBy     User?   @relation(fields: [userId], references: [id])
-  Event        Event?  @relation(fields: [eventId], references: [id])
-  eventId      String?
-  userId       String?
+  id             String           @id @default(cuid())
+  title          String
+  compensation   String
+  filled         Boolean
+  filledBy       User?            @relation(fields: [userId], references: [id])
+  Event          Event?           @relation(fields: [eventId], references: [id])
+  eventId        String?
+  userId         String?
+  UserOnPosition UserOnPosition[]
 }
 
 model OrgOnFreelancer {
@@ -119,4 +122,13 @@ model OrgOnManager {
   userId         String
 
   @@id([organizationId, userId])
+}
+
+model UserOnPosition {
+  position   Position @relation(fields: [positionId], references: [id])
+  positionId String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+
+  @@id([positionId, userId])
 }
