@@ -6,6 +6,7 @@ import type { Position } from '@prisma/client';
 export const load = async ({ params, parent }: any) => {
 	const eventId = params.event;
 	const { session } = await parent();
+	const { isManager } = await parent();
 	const userEmail = session.user.email;
 	const user = await prisma.user.findUnique({
 		where: {
@@ -30,13 +31,41 @@ export const load = async ({ params, parent }: any) => {
 		}
 	});
 	const posIds = declaredPos.map((pos) => pos.positionId);
-	const eventData = {
-		...dbEventData,
-		positions: dbEventData?.positions.map((pos: any) => {
-			pos['declared'] = posIds.includes(pos.id);
-			return pos;
-		})
-	};
+	let eventData = {};
+	async function posFreelancers(id: string) {
+		const freelancers = await prisma.userOnPosition.findMany({
+			where: {
+				positionId: id
+			},
+			select: {
+				user: true
+			}
+		});
+		return freelancers.map((freelancer) => {
+			return freelancer.user;
+		});
+	}
+	if (isManager) {
+		eventData = {
+			...dbEventData,
+			positions: await Promise.all(
+				dbEventData?.positions.map(async (pos: any) => {
+					pos['declared'] = posIds.includes(pos.id);
+					pos['freelancers'] = await posFreelancers(pos.id);
+					return pos;
+				})
+			)
+		};
+	} else {
+		eventData = {
+			...dbEventData,
+			positions: dbEventData?.positions.map((pos: any) => {
+				pos['declared'] = posIds.includes(pos.id);
+				return pos;
+			})
+		};
+	}
+	// console.log(eventData.positions[0].freelancers);
 	return { eventData };
 };
 
@@ -92,6 +121,44 @@ export const actions = {
 					positionId: String(positionId),
 					userId: String(userId)
 				}
+			}
+		});
+	},
+	assign: async ({ request }) => {
+		const data = await request.formData();
+		const positionId = data.get('positionId');
+
+		const userEmail = data.get('email');
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
+
+		const assignUser = await prisma.position.update({
+			where: {
+				id: String(positionId)
+			},
+			data: {
+				filledBy: {
+					connect: {
+						id: String(userId)
+					}
+				}
+			}
+		});
+	},
+	removeAssignment: async ({ request }) => {
+		const data = await request.formData();
+		const positionId = data.get('positionId');
+
+		const assignUser = await prisma.position.update({
+			where: {
+				id: String(positionId)
+			},
+			data: {
+				userId: null
 			}
 		});
 	}
