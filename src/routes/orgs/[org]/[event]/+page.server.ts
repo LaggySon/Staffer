@@ -6,6 +6,13 @@ import type { Position } from '@prisma/client';
 export const load = async ({ params, parent }: any) => {
 	const eventId = params.event;
 	const { session } = await parent();
+	const userEmail = session.user.email;
+	const user = await prisma.user.findUnique({
+		where: {
+			email: String(userEmail)
+		}
+	});
+	const userId = user?.id;
 	const dbEventData = await prisma.event.findUnique({
 		where: {
 			id: String(eventId)
@@ -16,7 +23,7 @@ export const load = async ({ params, parent }: any) => {
 	});
 	const declaredPos = await prisma.userOnPosition.findMany({
 		where: {
-			userId: session.user.id
+			userId: userId
 		},
 		select: {
 			positionId: true
@@ -63,6 +70,27 @@ export const actions = {
 					connect: {
 						id: String(userId)
 					}
+				}
+			}
+		});
+	},
+	removeDec: async ({ request }) => {
+		const data = await request.formData();
+		const positionId = data.get('positionId');
+
+		const userEmail = data.get('email');
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
+
+		const removeUser = await prisma.userOnPosition.delete({
+			where: {
+				positionId_userId: {
+					positionId: String(positionId),
+					userId: String(userId)
 				}
 			}
 		});
