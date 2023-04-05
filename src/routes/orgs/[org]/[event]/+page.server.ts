@@ -66,5 +66,26 @@ export const actions = {
 				}
 			}
 		});
+	},
+	removeDec: async ({ request }) => {
+		const data = await request.formData();
+		const positionId = data.get('positionId');
+
+		const userEmail = data.get('email');
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
+
+		const removeUser = await prisma.userOnPosition.delete({
+			where: {
+				positionId_userId: {
+					positionId: String(positionId),
+					userId: String(userId)
+				}
+			}
+		});
 	}
 };
