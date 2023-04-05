@@ -1,11 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import type Actions from '@sveltejs/kit';
 const prisma = new PrismaClient();
+import type { Position } from '@prisma/client';
 
 export const load = async ({ params, parent }: any) => {
 	const eventId = params.event;
 	const { session } = await parent();
-	const eventData = await prisma.event.findUnique({
+	const dbEventData = await prisma.event.findUnique({
 		where: {
 			id: String(eventId)
 		},
@@ -13,7 +14,22 @@ export const load = async ({ params, parent }: any) => {
 			positions: { include: { filledBy: true } }
 		}
 	});
-	console.log(eventData);
+	const declaredPos = await prisma.userOnPosition.findMany({
+		where: {
+			userId: session.user.id
+		},
+		select: {
+			positionId: true
+		}
+	});
+	const posIds = declaredPos.map((pos) => pos.positionId);
+	const eventData = {
+		...dbEventData,
+		positions: dbEventData?.positions.map((pos: any) => {
+			pos['declared'] = posIds.includes(pos.id);
+			return pos;
+		})
+	};
 	return { eventData };
 };
 

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { redirect } from '@sveltejs/kit';
+import type { Event } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const load = async ({ params, parent }: any) => {
@@ -13,6 +14,7 @@ export const load = async ({ params, parent }: any) => {
 			}
 		}
 	});
+
 	const org = await prisma.organization.findUnique({
 		where: {
 			name: orgName
