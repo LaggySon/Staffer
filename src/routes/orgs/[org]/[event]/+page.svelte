@@ -2,14 +2,18 @@
 	import type { Position, User } from '@prisma/client';
 	import dayjs from 'dayjs';
 	import { page } from '$app/stores';
+	import ExpandMore from '$lib/expandMore.svelte';
 	export let data;
 
 	type newPos = Position & {
 		filledBy: User;
 		declared: boolean;
+		freelancers?: User[];
 	};
 
 	const positions = data?.eventData?.positions as newPos[];
+
+	let expand = '';
 </script>
 
 <div class="flex justify-center gap-4">
@@ -35,8 +39,8 @@
 	</div>
 
 	{#each positions as position}
-		<form class="grid grid-cols-3" method="POST" action="?/declare">
-			<div>
+		<form class="grid grid-cols-3 my-2" method="POST" action="?/declare">
+			<div class="flex justify-center items-center gap-2 relative">
 				{#if !position.declared && !position.filledBy}
 					<button
 						formaction="?/declare"
@@ -47,7 +51,7 @@
 				{:else if position.declared && !position.filledBy}
 					<button
 						formaction="?/removeDec"
-						class="bg-slate-800 cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg px-2"
+						class="bg-slate-800 cursor-pointer hover:bg-red-400 transition-all hover:rounded-lg px-2"
 						>-</button
 					>
 					<span class="bg-orange-400 p-1">Pending</span>
@@ -55,6 +59,40 @@
 					<span class="bg-blue-400 text-white p-1">Filled By You</span>
 				{:else}
 					<span class="bg-red-400 text-white p-1">Filled By: {position.filledBy.name}</span>
+				{/if}
+				{#if data.isManager}
+					<div class="relative">
+						<button
+							class="bg-slate-800 cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg px-2 "
+							on:click|preventDefault={() => (expand = expand === position.id ? '' : position.id)}
+							><ExpandMore /></button
+						>
+						{#if expand === position.id}
+							<div class="absolute top-5 bg-slate-800 p-2 z-10">
+								{#each position.freelancers as freelancer}
+									<form method="POST" action="?/assign">
+										<input type="hidden" name="email" value={freelancer.email} />
+										<input type="hidden" name="positionId" value={position.id} />
+										<input
+											class="hover:bg-blue-400 p-1 hover:rounded-lg transition-all cursor-pointer"
+											type="submit"
+											value={freelancer.name}
+										/>
+									</form>
+								{/each}
+								{#if position.filledBy}
+									<form method="POST" action="?/removeAssignment">
+										<input type="hidden" name="positionId" value={position.id} />
+										<input
+											class="hover:bg-red-400 p-1 hover:rounded-lg transition-all cursor-pointer"
+											type="submit"
+											value="Remove Selection"
+										/>
+									</form>
+								{/if}
+							</div>
+						{/if}
+					</div>
 				{/if}
 			</div>
 

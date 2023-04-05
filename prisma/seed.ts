@@ -45,6 +45,26 @@ async function main() {
 									title: 'Camera Operator',
 									compensation: '$25/hr',
 									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
 								}
 							]
 						},
@@ -109,6 +129,64 @@ async function main() {
 						location: 'Tansey Gym',
 						positions: {
 							create: [
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								}
+							]
+						},
+						date: new Date()
+					}
+				]
+			},
+			freelancers: {},
+			managers: {}
+		}
+	});
+	const wit3 = await prisma.organization.upsert({
+		where: { name: 'SportsBall Org' },
+		update: {},
+		create: {
+			name: 'SportsBallOrg',
+			logo: 'https://logotyp.us/files/nfl.svg?ver20230225',
+			description: 'Woohoo Sports!',
+			contactInfo: 'Boston',
+			socials: {
+				create: [
+					{
+						site: 'Twitter',
+						handle: '@SportsBall'
+					}
+				]
+			},
+			events: {
+				create: [
+					{
+						name: 'Red Sox',
+						location: 'Fenway Park',
+						positions: {
+							create: [
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
+								{
+									title: 'Camera Operator',
+									compensation: '$25/hr',
+									filled: false
+								},
 								{
 									title: 'Camera Operator',
 									compensation: '$25/hr',

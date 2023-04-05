@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export const load = async ({ parent }) => {
+export const load = async ({ parent }: any) => {
 	const { session } = await parent();
 	if (session) {
 		const orgs = await prisma.orgOnFreelancer.findMany({
