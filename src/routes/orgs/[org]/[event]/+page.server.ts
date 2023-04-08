@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import type Actions from '@sveltejs/kit';
 const prisma = new PrismaClient();
 import type { Position } from '@prisma/client';
+import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ params, parent }: any) => {
 	const eventId = params.event;
@@ -14,7 +15,7 @@ export const load = async ({ params, parent }: any) => {
 		}
 	});
 	const userId = user?.id;
-	const dbEventData = await prisma.event.findUnique({
+	const dbEventData: any = await prisma.event.findUnique({
 		where: {
 			id: String(eventId)
 		},
@@ -149,7 +150,7 @@ export const actions = {
 			}
 		});
 	},
-	removeAssignment: async ({ request }) => {
+	removeAssignment: async ({ request }: any) => {
 		const data = await request.formData();
 		const positionId = data.get('positionId');
 
@@ -161,5 +162,33 @@ export const actions = {
 				userId: null
 			}
 		});
+	},
+	deleteEvent: async ({ request }: any) => {
+		const data = await request.formData();
+		const eventId = data.get('eventId');
+		const orgId = await prisma.event.findUnique({
+			where: {
+				id: eventId
+			},
+			select: {
+				organizationId: true
+			}
+		});
+
+		const orgName = await prisma.organization.findUnique({
+			where: {
+				id: String(orgId?.organizationId)
+			},
+			select: {
+				name: true
+			}
+		});
+		const delEvent = await prisma.event.delete({
+			where: {
+				id: eventId
+			}
+		});
+
+		throw redirect(302, `/orgs/${orgName?.name}`);
 	}
 };

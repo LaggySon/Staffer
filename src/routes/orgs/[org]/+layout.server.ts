@@ -18,6 +18,9 @@ export const load = async ({ params, parent }: any) => {
 	const org = await prisma.organization.findUnique({
 		where: {
 			name: orgName
+		},
+		include: {
+			socials: true
 		}
 	});
 	const validUsers = await prisma.organization.findUnique({

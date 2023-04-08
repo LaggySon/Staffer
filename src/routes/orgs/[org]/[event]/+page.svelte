@@ -1,17 +1,17 @@
 <script lang="ts">
-	import type { Position, User } from '@prisma/client';
+	import type { Event, Position, User } from '@prisma/client';
 	import dayjs from 'dayjs';
 	import { page } from '$app/stores';
 	import ExpandMore from '$lib/expandMore.svelte';
-	export let data;
+	export let data: any;
 
 	type newPos = Position & {
 		filledBy: User;
 		declared: boolean;
-		freelancers?: User[];
+		freelancers: User[];
 	};
 
-	const positions = data?.eventData?.positions as newPos[];
+	const positions: newPos[] = data?.eventData?.positions as newPos[];
 
 	let expand = '';
 </script>
@@ -102,4 +102,12 @@
 			<span>{position.compensation}</span>
 		</form>
 	{/each}
+	{#if data?.isManager}
+		<form method="POST">
+			<input type="hidden" name="eventId" value={data.eventData.id} />
+			<button class="inline bg-red-400 mt-10 p-2 text-sm" formaction="?/deleteEvent"
+				>DELTE EVENT</button
+			>
+		</form>
+	{/if}
 </div>
