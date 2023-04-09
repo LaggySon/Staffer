@@ -29,7 +29,7 @@
 				<li
 					class="text-gray-700 hover:text-white hover:bg-blue-400 bg-slate-300 p-2 m-2 max-w-lg mx-auto hover:rounded-lg transition-all"
 				>
-					<a href={`/orgs/${org?.name}`} class="flex items-center justify-center gap-2"
+					<a href={`/orgs/${org?.id}`} class="flex items-center justify-center gap-2"
 						><img src={org?.logo} alt="" class="h-[2em]" /><span>{org?.name}</span></a
 					>
 				</li>

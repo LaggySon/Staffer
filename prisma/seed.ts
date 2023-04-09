@@ -8,6 +8,7 @@ async function main() {
 		where: { name: 'Wentworth' },
 		update: {},
 		create: {
+			id: 'wentworth',
 			name: 'Wentworth',
 			logo: 'https://www.ncaa.com/sites/default/files/images/logos/schools/bgd/wentworth.svg',
 			description: 'Wentworth Institute of Technology',
@@ -71,24 +72,6 @@ async function main() {
 						date: new Date()
 					}
 				]
-			},
-			freelancers: {
-				create: {
-					user: {
-						connect: {
-							email: '43mikejunk@gmail.com'
-						}
-					}
-				}
-			},
-			managers: {
-				create: {
-					user: {
-						connect: {
-							email: '43mikejunk@gmail.com'
-						}
-					}
-				}
 			}
 		}
 	});
@@ -139,15 +122,14 @@ async function main() {
 						date: new Date()
 					}
 				]
-			},
-			freelancers: {},
-			managers: {}
+			}
 		}
 	});
 	const wit3 = await prisma.organization.upsert({
 		where: { name: 'SportsBall Org' },
 		update: {},
 		create: {
+			id: 'sports',
 			name: 'SportsBallOrg',
 			logo: 'https://logotyp.us/files/nfl.svg?ver20230225',
 			description: 'Woohoo Sports!',
@@ -197,9 +179,7 @@ async function main() {
 						date: new Date()
 					}
 				]
-			},
-			freelancers: {},
-			managers: {}
+			}
 		}
 	});
 }

@@ -3,6 +3,7 @@ import type Actions from '@sveltejs/kit';
 const prisma = new PrismaClient();
 import type { Position } from '@prisma/client';
 import { redirect } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 
 export const load = async ({ params, parent }: any) => {
 	const eventId = params.event;
@@ -189,6 +190,70 @@ export const actions = {
 			}
 		});
 
-		throw redirect(302, `/orgs/${orgName?.name}`);
+		throw redirect(302, `/orgs/${orgId?.organizationId}`);
+	},
+	updateEvent: async ({ request }: any) => {
+		const data = await request.formData();
+
+		const name = data.get('name');
+		const location = data.get('location');
+		const date = data.get('date');
+		console.log(date);
+		console.log(dayjs(date).toDate());
+		const eventId = data.get('eventId');
+
+		const updateOrg = await prisma.event.update({
+			where: {
+				id: String(eventId)
+			},
+			data: {
+				name,
+				location,
+				date: dayjs(date).toDate()
+			}
+		});
+	},
+	createPosition: async ({ request }: any) => {
+		const data = await request.formData();
+		const eventId = data.get('eventId');
+
+		const newPos = await prisma.position.create({
+			data: {
+				title: '',
+				compensation: '',
+				filled: false,
+				Event: {
+					connect: {
+						id: String(eventId)
+					}
+				}
+			}
+		});
+	},
+	deletePosition: async ({ request }: any) => {
+		const data = await request.formData();
+		const posId = data.get('posId');
+
+		const delPos = await prisma.position.delete({
+			where: {
+				id: posId
+			}
+		});
+	},
+	updatePosition: async ({ request }: any) => {
+		const data = await request.formData();
+		const title = data.get('newTitle');
+		const compensation = data.get('newCompensation');
+		const posId = data.get('posId');
+
+		const updatePos = await prisma.position.update({
+			where: {
+				id: posId
+			},
+			data: {
+				title,
+				compensation
+			}
+		});
 	}
 };

@@ -45,8 +45,8 @@ export const actions = {
 			data: {
 				socials: {
 					create: {
-						site: 'Example',
-						handle: '@example'
+						site: '',
+						handle: ''
 					}
 				}
 			}
@@ -62,5 +62,46 @@ export const actions = {
 				id: socialId
 			}
 		});
+	},
+	updateSocial: async ({ request }: any) => {
+		const data = await request.formData();
+
+		const site = data.get('site');
+		const handle = data.get('handle');
+		const socialId = data.get('socialId');
+
+		const updateSocial = await prisma.social.update({
+			where: {
+				id: String(socialId)
+			},
+			data: {
+				site,
+				handle
+			}
+		});
+	},
+	deleteOrg: async ({ request }: any) => {
+		const data = await request.formData();
+		const orgId = data.get('orgId');
+
+		const delFreelancers = await prisma.orgOnFreelancer.deleteMany({
+			where: {
+				organizationId: String(orgId)
+			}
+		});
+
+		const delManagers = await prisma.orgOnManager.deleteMany({
+			where: {
+				organizationId: String(orgId)
+			}
+		});
+
+		const delOrg = await prisma.organization.delete({
+			where: {
+				id: String(orgId)
+			}
+		});
+
+		throw redirect(302, '/');
 	}
 };

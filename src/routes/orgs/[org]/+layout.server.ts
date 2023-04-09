@@ -5,19 +5,19 @@ const prisma = new PrismaClient();
 
 export const load = async ({ params, parent }: any) => {
 	const { session } = await parent();
-	const orgName = params.org;
+	const orgId = params.org;
 	let isManager = false;
 	const events = await prisma.event.findMany({
 		where: {
 			Organization: {
-				name: orgName
+				id: orgId
 			}
 		}
 	});
 
 	const org = await prisma.organization.findUnique({
 		where: {
-			name: orgName
+			id: orgId
 		},
 		include: {
 			socials: true
@@ -25,7 +25,7 @@ export const load = async ({ params, parent }: any) => {
 	});
 	const validUsers = await prisma.organization.findUnique({
 		where: {
-			name: orgName
+			id: orgId
 		},
 		select: {
 			freelancers: {
@@ -38,7 +38,7 @@ export const load = async ({ params, parent }: any) => {
 	});
 	const managers = await prisma.organization.findUnique({
 		where: {
-			name: orgName
+			id: orgId
 		},
 		select: {
 			managers: {

@@ -1,18 +1,24 @@
 <script lang="ts">
+	import Check from '$lib/check.svelte';
+	import Delete from '$lib/delete.svelte';
 	import type { Social } from '@prisma/client';
 	import { each } from 'svelte/internal';
 
 	export let data;
 
 	let socials: any = data?.org?.socials;
+
+	let showDelete = false;
+
+	let name = data?.org?.name;
 </script>
 
 <div class="flex justify-center items-center mb-10 gap-4">
-	<a href={`/orgs/${data?.org?.name}`} class="flex justify-center"
+	<a href={`/orgs/${data?.org?.id}`} class="flex justify-center"
 		><img src={data?.org?.logo} alt="" class="h-[4em]" /></a
 	>
 
-	<h1 class=" text-xl ">Managing {data?.org?.name}</h1>
+	<h1 class=" text-xl ">Managing {name === '' ? 'a new organization' : name}</h1>
 </div>
 
 <form action="?/update" method="post" class=" flex flex-col gap-4 justify-center items-center ">
@@ -24,16 +30,14 @@
 			value={data?.org?.name}
 			type="text"
 			name="name"
-			class="text-center bg-transparent border-b outline-none text-gray-400"
+			class="text-center bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
 	<div class="flex flex-col w-3/4">
 		<label for="description" class="text-center">Organization Description:</label>
-		<textarea
-			name="description"
-			class="text-center bg-transparent border outline-none text-gray-400"
-			required>{data?.org?.description}</textarea
+		<textarea name="description" class="text-center bg-transparent border outline-none " required
+			>{data?.org?.description}</textarea
 		>
 	</div>
 	<div class="flex flex-col w-3/4">
@@ -42,7 +46,7 @@
 			type="text"
 			name="logo"
 			value={data?.org?.logo}
-			class="text-center bg-transparent border-b outline-none text-gray-400"
+			class="text-center bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
@@ -52,7 +56,7 @@
 			type="text"
 			name="contactInfo"
 			value={data?.org?.contactInfo}
-			class="text-center bg-transparent border-b outline-none text-gray-400"
+			class="text-center bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
@@ -71,7 +75,9 @@
 						required
 						type="text"
 						bind:value={socials[i].site}
-						class="text-center bg-transparent border-b outline-none text-gray-400"
+						name="site"
+						class="text-center bg-transparent border-b outline-none "
+						placeholder="Website"
 					/>
 				</p>
 				<p>
@@ -79,13 +85,22 @@
 						required
 						type="text"
 						bind:value={socials[i].handle}
-						class="text-center bg-transparent border-b outline-none text-gray-400"
+						name="handle"
+						class="text-center bg-transparent border-b outline-none "
+						placeholder="Handle"
 					/>
 				</p>
-				<button
-					class="hover:rounded-lg transition-all mx-4 border hover:border-transparent hover:bg-red-400 px-4"
-					formaction="?/deleteSocial">-</button
-				>
+				<div class="flex justify-center items-center">
+					<button
+						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-red-400 p-1"
+						formaction="?/deleteSocial"><Delete /></button
+					>
+					<button
+						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-green-400 p-1"
+						formaction="?/updateSocial"><Check /></button
+					>
+				</div>
+				<input type="hidden" name="socialId" value={social.id} />
 			</form>
 		{/each}
 		<form method="post">
@@ -98,8 +113,25 @@
 			</button>
 		</form>
 	</div>
+
 	<a
 		class="hover:rounded-lg transition-all m-8 border hover:border-transparent hover:bg-red-400 px-4"
-		href={`/orgs/${data?.org?.name}`}>Back</a
+		href={`/orgs/${data?.org?.id}`}>Back</a
 	>
+	<form method="post">
+		<input type="hidden" name="orgId" value={data?.org?.id} />
+		{#if showDelete}
+			<button
+				class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+				formaction="?/deleteOrg">DELETE ORGANIZATION - ARE YOU SURE?</button
+			>
+		{:else}
+			<button
+				class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+				on:click|preventDefault={() => (showDelete = true)}
+			>
+				Delete Org
+			</button>
+		{/if}
+	</form>
 </div>

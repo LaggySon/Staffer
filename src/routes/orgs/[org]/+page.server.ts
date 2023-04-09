@@ -32,6 +32,6 @@ export const actions = {
 
 		console.log(org);
 
-		throw redirect(302, `/orgs/${String(org?.name)}/${event.id}`);
+		throw redirect(302, `/orgs/${String(orgId)}/${event.id}`);
 	}
 };
