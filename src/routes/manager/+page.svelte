@@ -2,6 +2,8 @@
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
 
+	let showCreateBox = false;
+
 	export let data;
 </script>
 
@@ -20,7 +22,7 @@
 		class="bg-blue-400 p-2  mx-auto my-4 w-32 hover:rounded-lg transition-all">Sign In</button
 	>
 {/if}
-<div class="flex justify-center items-center gap-2">
+<div class="flex flex-wrap justify-center items-center gap-2">
 	{#if $page?.data?.session?.user?.role === 'admin'}
 		{#each data.users as user}
 			<form method="POST" action="?/changeRole" class="border text-center p-2">
@@ -37,3 +39,10 @@
 		{/each}
 	{/if}
 </div>
+<form method="post" class="my-10 flex">
+	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
+	<button
+		class="mx-auto text-3xl bg-slate-300 dark:bg-slate-800 p-2  cursor-pointer hover:bg-blue-400 hover:rounded-lg transition-all"
+		formaction="?/createOrg">Create an Organization</button
+	>
+</form>

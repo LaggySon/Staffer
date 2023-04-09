@@ -89,7 +89,7 @@ model Event {
   name           String
   location       String
   positions      Position[]
-  date           DateTime      @db.Date
+  date           DateTime
   Organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
 }

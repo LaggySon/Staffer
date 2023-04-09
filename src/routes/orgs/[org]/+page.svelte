@@ -44,7 +44,7 @@
 		</div>
 		<a
 			class="bg-red-400 text-sm text-center cursor-pointer hover:rounded-lg transition-all p-1"
-			href={`/orgs/${org?.name}/manage`}>Manage {org?.name}</a
+			href={`/orgs/${org?.id}/manage`}>Manage {org?.name}</a
 		>
 	{/if}
 </div>
@@ -57,7 +57,7 @@
 	</div>
 
 	{#each events as event}
-		<a href={`/orgs/${org?.name}/${event?.id}`}>
+		<a href={`/orgs/${org?.id}/${event?.id}`}>
 			<Event name={event.name} location={event.location} date={String(event.date)} />
 		</a>
 	{/each}

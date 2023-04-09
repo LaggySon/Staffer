@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { redirect } from '@sveltejs/kit';
 const prisma = new PrismaClient();
 
 export const load = async () => {
@@ -28,5 +29,50 @@ export const actions = {
 
 		const users = await prisma.user.findMany();
 		console.log(users);
+	},
+	createOrg: async ({ request }: any) => {
+		const data = await request.formData();
+		const userEmail = data.get('userEmail');
+
+		const newOrg = await prisma.organization.create({
+			data: {
+				name: '',
+				logo: '',
+				description: '',
+				contactInfo: ''
+			}
+		});
+
+		const addManager = await prisma.orgOnManager.create({
+			data: {
+				organization: {
+					connect: {
+						id: newOrg.id
+					}
+				},
+				user: {
+					connect: {
+						email: userEmail
+					}
+				}
+			}
+		});
+
+		const addFreelancer = await prisma.orgOnFreelancer.create({
+			data: {
+				organization: {
+					connect: {
+						id: newOrg.id
+					}
+				},
+				user: {
+					connect: {
+						email: userEmail
+					}
+				}
+			}
+		});
+
+		throw redirect(302, `/orgs/${newOrg.id}/manage`);
 	}
 };
