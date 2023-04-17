@@ -19,7 +19,7 @@ Staffer is an application that helps you manage and staff events that rely on a 
 8. Start the application locally using `npm run dev`
 
 ## Getting Started
-- On the local version of the site, we have provided two sample premade organizations for you to join and test out as a freelancer. Their join codes are `wentworth` and `sportsball`.
+- On the local version of the site, we have provided two sample premade organizations for you to join and test out as a freelancer. Their join codes are `wentworth` and `sports`.
 - You can create a new organization by going to the `manager` page and clicking the button after signing in!
 
 ## License
