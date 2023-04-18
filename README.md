@@ -12,7 +12,7 @@ Staffer is an application that helps you manage and staff events that rely on a 
 1. Install [Docker](https://www.docker.com/)
 2. Clone repo locally using `git clone https://github.com/laggyson/staffer`
 3. `cd staffer` to change directory to the local repository
-4. Create a file `.env` in the root directory and copy the contents of `.env.example` into it
+4. Rename `.env.example` to `.env` - This contains all of the environment variables required for the software to function
 5. `docker-compose up -d` will start the local PostgreSQL database and run it in the background for you
 6. Install the application's dependencies with `npm install`
 7. Run `npx prisma migrate dev` and `npx prisma db seed` to seed and configure the new database to our application
