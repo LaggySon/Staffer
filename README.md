@@ -24,7 +24,7 @@ Staffer is an application that helps you manage and staff events that rely on a 
 
 ## License
 
-Staffer is released under the [MIT License](LICENSE).
+Staffer is released under the [MIT License](License).
 
 ## Contact
 
