@@ -39,6 +39,7 @@
 		{/each}
 	{/if}
 </div>
+{#if $page.data.session}
 <form method="post" class="my-10 flex">
 	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
 	<button
@@ -46,3 +47,4 @@
 		formaction="?/createOrg">Create an Organization</button
 	>
 </form>
+{/if}
