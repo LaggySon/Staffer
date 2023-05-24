@@ -25,38 +25,38 @@
 	<input type="hidden" name="socials" value={socials} />
 	<input type="hidden" name="orgId" value={data?.org?.id} />
 	<div class="flex flex-col w-full max-w-xl">
-		<label for="name">Organization Name:</label>
+		<label for="name" class=" text-sm">Organization Name:</label>
 		<input
 			value={data?.org?.name}
 			type="text"
 			name="name"
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
 	<div class="flex flex-col w-full max-w-xl">
-		<label for="description">Organization Description:</label>
-		<textarea name="description" class="text-center bg-transparent border outline-none " required
+		<label for="description" class=" text-sm">Organization Description:</label>
+		<textarea name="description" class=" bg-transparent border outline-none " required
 			>{data?.org?.description}</textarea
 		>
 	</div>
 	<div class="flex flex-col w-full max-w-xl">
-		<label for="logo">Organization Logo URL:</label>
+		<label for="logo" class=" text-sm">Organization Logo URL:</label>
 		<input
 			type="text"
 			name="logo"
 			value={data?.org?.logo}
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
 	<div class="flex flex-col w-full max-w-xl">
-		<label for="contactInfo">Organization Contact Info:</label>
+		<label for="contactInfo" class=" text-sm">Organization Contact Info:</label>
 		<input
 			type="text"
 			name="contactInfo"
 			value={data?.org?.contactInfo}
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
@@ -65,28 +65,30 @@
 	>
 </form>
 <div class=" flex flex-col gap-4 justify-center items-center ">
-	<p class="text-center">Socials</p>
+	<p class="">Socials</p>
 	<div class="flex flex-col items-center">
 		{#each socials as social, i}
 			<form method="POST" class="flex-wrap flex gap-2 m-4">
 				<input type="hidden" name="socialId" value={social.id} />
 				<p class="flex flex-col">
-					Website: <input
+					<span class="text-sm">Website:</span>
+					<input
 						required
 						type="text"
 						bind:value={socials[i].site}
 						name="site"
-						class="text-center bg-transparent border-b outline-none "
+						class=" bg-transparent border-b outline-none "
 						placeholder="Website"
 					/>
 				</p>
 				<p class="flex flex-col">
-					Handle: <input
+					<span class="text-sm">Handle:</span>
+					<input
 						required
 						type="text"
 						bind:value={socials[i].handle}
 						name="handle"
-						class="text-center bg-transparent border-b outline-none "
+						class=" bg-transparent border-b outline-none "
 						placeholder="Handle"
 					/>
 				</p>
