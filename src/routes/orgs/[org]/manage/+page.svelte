@@ -13,7 +13,7 @@
 	let name = data?.org?.name;
 </script>
 
-<div class="flex justify-center items-center mb-10 gap-4">
+<div class="flex flex-wrap justify-center items-center mb-10 gap-4">
 	<a href={`/orgs/${data?.org?.id}`} class="flex justify-center"
 		><img src={data?.org?.logo} alt="" class="h-[4em]" /></a
 	>
@@ -21,42 +21,42 @@
 	<h1 class=" text-xl ">Managing {name === '' ? 'a new organization' : name}</h1>
 </div>
 
-<form action="?/update" method="post" class=" flex flex-col gap-4 justify-center items-center ">
+<form action="?/update" method="post" class=" flex flex-col  gap-4 justify-center items-center ">
 	<input type="hidden" name="socials" value={socials} />
 	<input type="hidden" name="orgId" value={data?.org?.id} />
-	<div class="flex flex-col w-3/4">
-		<label for="name" class="text-center">Organization Name:</label>
+	<div class="flex flex-col w-full max-w-xl">
+		<label for="name" class=" text-sm">Organization Name:</label>
 		<input
 			value={data?.org?.name}
 			type="text"
 			name="name"
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
-	<div class="flex flex-col w-3/4">
-		<label for="description" class="text-center">Organization Description:</label>
-		<textarea name="description" class="text-center bg-transparent border outline-none " required
+	<div class="flex flex-col w-full max-w-xl">
+		<label for="description" class=" text-sm">Organization Description:</label>
+		<textarea name="description" class=" bg-transparent border outline-none " required
 			>{data?.org?.description}</textarea
 		>
 	</div>
-	<div class="flex flex-col w-3/4">
-		<label for="logo" class="text-center">Organization Logo URL:</label>
+	<div class="flex flex-col w-full max-w-xl">
+		<label for="logo" class=" text-sm">Organization Logo URL:</label>
 		<input
 			type="text"
 			name="logo"
 			value={data?.org?.logo}
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
-	<div class="flex flex-col w-3/4">
-		<label for="contactInfo" class="text-center">Organization Contact Info:</label>
+	<div class="flex flex-col w-full max-w-xl">
+		<label for="contactInfo" class=" text-sm">Organization Contact Info:</label>
 		<input
 			type="text"
 			name="contactInfo"
 			value={data?.org?.contactInfo}
-			class="text-center bg-transparent border-b outline-none "
+			class=" bg-transparent border-b outline-none "
 			required
 		/>
 	</div>
@@ -65,28 +65,30 @@
 	>
 </form>
 <div class=" flex flex-col gap-4 justify-center items-center ">
-	<p class="text-center">Socials</p>
-	<div class="border flex flex-col items-center">
+	<p class="">Socials</p>
+	<div class="flex flex-col items-center">
 		{#each socials as social, i}
-			<form method="POST" class="flex flex-col gap-2 m-4">
+			<form method="POST" class="flex-wrap flex gap-2 m-4">
 				<input type="hidden" name="socialId" value={social.id} />
-				<p>
-					Website: <input
+				<p class="flex flex-col">
+					<span class="text-sm">Website:</span>
+					<input
 						required
 						type="text"
 						bind:value={socials[i].site}
 						name="site"
-						class="text-center bg-transparent border-b outline-none "
+						class=" bg-transparent border-b outline-none "
 						placeholder="Website"
 					/>
 				</p>
-				<p>
-					Handle: <input
+				<p class="flex flex-col">
+					<span class="text-sm">Handle:</span>
+					<input
 						required
 						type="text"
 						bind:value={socials[i].handle}
 						name="handle"
-						class="text-center bg-transparent border-b outline-none "
+						class=" bg-transparent border-b outline-none "
 						placeholder="Handle"
 					/>
 				</p>
