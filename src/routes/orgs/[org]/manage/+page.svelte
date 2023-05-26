@@ -7,8 +7,10 @@
 	export let data;
 
 	let socials: any = data?.org?.socials;
+	console.log(socials);
 
 	let showDelete = false;
+	let showCreateSocial = false;
 
 	let name = data?.org?.name;
 </script>
@@ -68,7 +70,7 @@
 	<p class="">Socials</p>
 	<div class="flex flex-col items-center">
 		{#each socials as social, i}
-			<form method="POST" class="flex-wrap flex gap-2 m-4">
+			<form method="POST" class="flex-wrap flex gap-2 m-4 justify-center">
 				<input type="hidden" name="socialId" value={social.id} />
 				<p class="flex flex-col">
 					<span class="text-sm">Website:</span>
@@ -92,14 +94,10 @@
 						placeholder="Handle"
 					/>
 				</p>
-				<div class="flex justify-center items-center">
+				<div class="flex justify-center items-center w-full md:w-auto">
 					<button
 						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-red-400 p-1"
 						formaction="?/deleteSocial"><Delete /></button
-					>
-					<button
-						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-green-400 p-1"
-						formaction="?/updateSocial"><Check /></button
 					>
 				</div>
 				<input type="hidden" name="socialId" value={social.id} />
@@ -107,12 +105,37 @@
 		{/each}
 		<form method="post">
 			<input type="hidden" name="orgId" value={data?.org?.id} />
-			<button
-				formaction="?/createSocial"
-				class="hover:rounded-lg transition-all m-4 border hover:border-transparent hover:bg-blue-400 px-4"
-			>
-				+
-			</button>
+			{#if showCreateSocial}
+				<div class="flex gap-2 flex-wrap justify-center">
+					<p class="flex flex-col">
+						<span class="text-sm">Website:</span>
+						<input
+							required
+							type="text"
+							name="site"
+							class=" bg-transparent border-b outline-none "
+							placeholder="Website"
+						/>
+					</p>
+					<p class="flex flex-col">
+						<span class="text-sm">Handle:</span>
+						<input
+							required
+							type="text"
+							name="handle"
+							class=" bg-transparent border-b outline-none "
+							placeholder="Handle"
+						/>
+					</p>
+				</div>
+			{:else}
+				<button
+					on:click={() => (showCreateSocial = true)}
+					class="hover:rounded-lg transition-all m-4 border hover:border-transparent hover:bg-blue-400 px-4"
+				>
+					Create Social
+				</button>
+			{/if}
 		</form>
 	</div>
 
