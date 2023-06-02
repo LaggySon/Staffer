@@ -103,5 +103,12 @@ export const actions = {
 		});
 
 		throw redirect(302, '/');
+	},
+	newSocials: async ({ request }: any) => {
+		const data = await request.formData();
+		const orgId = data.get('orgId');
+		const socials = data.get('newSocials');
+
+		console.log(socials);
 	}
 };

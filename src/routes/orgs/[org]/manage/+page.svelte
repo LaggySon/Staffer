@@ -6,8 +6,25 @@
 
 	export let data;
 
-	let socials: any = data?.org?.socials;
-	console.log(socials);
+	function getSocials(): any {
+		let socials: any = data?.org?.socials;
+		socials = socials.map((social: Social) => {
+			return { website: social.site, handle: social.handle };
+		});
+		return socials;
+	}
+
+	function addSocial() {
+		socials = [...socials, { website: '', handle: '' }];
+	}
+
+	function deleteSocial(social: any) {
+		socials = socials.filter((s: any) => s !== social);
+	}
+
+	let socials = getSocials();
+
+	console.log(getSocials());
 
 	let showDelete = false;
 	let showCreateSocial = false;
@@ -62,56 +79,18 @@
 			required
 		/>
 	</div>
-	<button formaction="?/update" class="hover:rounded-lg transition-all mb-8 bg-blue-400 px-4"
-		>Save Changes</button
-	>
-</form>
-<div class=" flex flex-col gap-4 justify-center items-center ">
-	<p class="">Socials</p>
-	<div class="flex flex-col items-center">
-		{#each socials as social, i}
-			<form method="POST" class="flex-wrap flex gap-2 m-4 justify-center">
-				<input type="hidden" name="socialId" value={social.id} />
-				<p class="flex flex-col">
-					<span class="text-sm">Website:</span>
-					<input
-						required
-						type="text"
-						bind:value={socials[i].site}
-						name="site"
-						class=" bg-transparent border-b outline-none "
-						placeholder="Website"
-					/>
-				</p>
-				<p class="flex flex-col">
-					<span class="text-sm">Handle:</span>
-					<input
-						required
-						type="text"
-						bind:value={socials[i].handle}
-						name="handle"
-						class=" bg-transparent border-b outline-none "
-						placeholder="Handle"
-					/>
-				</p>
-				<div class="flex justify-center items-center w-full md:w-auto">
-					<button
-						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-red-400 p-1"
-						formaction="?/deleteSocial"><Delete /></button
-					>
-				</div>
-				<input type="hidden" name="socialId" value={social.id} />
-			</form>
-		{/each}
-		<form method="post">
-			<input type="hidden" name="orgId" value={data?.org?.id} />
-			{#if showCreateSocial}
-				<div class="flex gap-2 flex-wrap justify-center">
+
+	<div class=" flex flex-col gap-4 justify-center items-center ">
+		<p class="">Socials</p>
+		<div class="flex flex-col items-center">
+			{#each socials as social, i}
+				<div class="flex gap-2">
 					<p class="flex flex-col">
 						<span class="text-sm">Website:</span>
 						<input
 							required
 							type="text"
+							bind:value={socials[i].website}
 							name="site"
 							class=" bg-transparent border-b outline-none "
 							placeholder="Website"
@@ -122,41 +101,46 @@
 						<input
 							required
 							type="text"
+							bind:value={socials[i].handle}
 							name="handle"
 							class=" bg-transparent border-b outline-none "
 							placeholder="Handle"
 						/>
 					</p>
+					<button
+						class="hover:rounded-lg transition-all mx-4  hover:border-transparent hover:bg-red-400 p-1"
+						on:click={() => deleteSocial(social)}><Delete /></button
+					>
 				</div>
+			{/each}
+			<button
+				on:click={() => addSocial()}
+				class="hover:rounded-lg transition-all m-4 border hover:border-transparent hover:bg-blue-400 px-4"
+				>Add Social</button
+			>
+		</div>
+		<button formaction="?/update" class="hover:rounded-lg transition-all mb-8 bg-blue-400 px-4"
+			>Save Changes</button
+		>
+		<a
+			class="hover:rounded-lg transition-all m-8 border hover:border-transparent hover:bg-red-400 px-4"
+			href={`/orgs/${data?.org?.id}`}>Back</a
+		>
+		<form method="post">
+			<input type="hidden" name="orgId" value={data?.org?.id} />
+			{#if showDelete}
+				<button
+					class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+					formaction="?/deleteOrg">DELETE ORGANIZATION - ARE YOU SURE?</button
+				>
 			{:else}
 				<button
-					on:click={() => (showCreateSocial = true)}
-					class="hover:rounded-lg transition-all m-4 border hover:border-transparent hover:bg-blue-400 px-4"
+					class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+					on:click|preventDefault={() => (showDelete = true)}
 				>
-					Create Social
+					Delete Org
 				</button>
 			{/if}
 		</form>
 	</div>
-
-	<a
-		class="hover:rounded-lg transition-all m-8 border hover:border-transparent hover:bg-red-400 px-4"
-		href={`/orgs/${data?.org?.id}`}>Back</a
-	>
-	<form method="post">
-		<input type="hidden" name="orgId" value={data?.org?.id} />
-		{#if showDelete}
-			<button
-				class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
-				formaction="?/deleteOrg">DELETE ORGANIZATION - ARE YOU SURE?</button
-			>
-		{:else}
-			<button
-				class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
-				on:click|preventDefault={() => (showDelete = true)}
-			>
-				Delete Org
-			</button>
-		{/if}
-	</form>
-</div>
+</form>
