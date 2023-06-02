@@ -23,11 +23,12 @@
 	}
 
 	let socials = getSocials();
-
 	$: jsonSocials = JSON.stringify(socials);
 
 	let showDelete = false;
 	let showCreateSocial = false;
+
+	const prevSocialCount = socials.length;
 
 	let name = data?.org?.name;
 </script>
@@ -91,7 +92,9 @@
 							type="text"
 							bind:value={socials[i].website}
 							name="site"
-							class=" bg-transparent border-b outline-none "
+							class={` bg-transparent border-b ${
+								i > prevSocialCount - 1 ? 'border-yellow-400' : ''
+							} outline-none `}
 							placeholder="Website"
 						/>
 					</p>
@@ -102,7 +105,9 @@
 							type="text"
 							bind:value={socials[i].handle}
 							name="handle"
-							class=" bg-transparent border-b outline-none "
+							class={` bg-transparent border-b ${
+								i > prevSocialCount - 1 ? 'border-yellow-400' : ''
+							} outline-none `}
 							placeholder="Handle"
 						/>
 					</p>
