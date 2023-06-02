@@ -4,7 +4,8 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				JosefinSans: ['Josefin Sans', 'sans-serif']
+				JosefinSans: ['Josefin Sans', 'sans-serif'],
+				Inter: ['Inter', 'sans-serif']
 			}
 		}
 	},

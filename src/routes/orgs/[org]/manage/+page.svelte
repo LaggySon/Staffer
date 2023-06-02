@@ -9,13 +9,13 @@
 	function getSocials(): any {
 		let socials: any = data?.org?.socials;
 		socials = socials.map((social: Social) => {
-			return { website: social.site, handle: social.handle };
+			return { id: social.id, website: social.site, handle: social.handle };
 		});
 		return socials;
 	}
 
 	function addSocial() {
-		socials = [...socials, { website: '', handle: '' }];
+		socials = [...socials, { id: 'new', website: '', handle: '' }];
 	}
 
 	function deleteSocial(social: any) {
@@ -24,7 +24,7 @@
 
 	let socials = getSocials();
 
-	console.log(getSocials());
+	$: jsonSocials = JSON.stringify(socials);
 
 	let showDelete = false;
 	let showCreateSocial = false;
@@ -41,7 +41,6 @@
 </div>
 
 <form action="?/update" method="post" class=" flex flex-col  gap-4 justify-center items-center ">
-	<input type="hidden" name="socials" value={socials} />
 	<input type="hidden" name="orgId" value={data?.org?.id} />
 	<div class="flex flex-col w-full max-w-xl">
 		<label for="name" class=" text-sm">Organization Name:</label>
@@ -116,26 +115,32 @@
 			<button
 				on:click={() => addSocial()}
 				class="hover:rounded-lg transition-all m-4 border hover:border-transparent hover:bg-blue-400 px-4"
-				>Add Social</button
+				>+</button
 			>
 		</div>
-		<button formaction="?/update" class="hover:rounded-lg transition-all mb-8 bg-blue-400 px-4"
+		<input type="hidden" name="socials" value={jsonSocials} />
+	</div>
+
+	<div class="flex flex-col justify-center items-center gap-4">
+		<button
+			formaction="?/update"
+			class="hover:rounded-lg transition-all   hover:border-transparent bg-blue-400 px-4"
 			>Save Changes</button
 		>
 		<a
-			class="hover:rounded-lg transition-all m-8 border hover:border-transparent hover:bg-red-400 px-4"
+			class="hover:rounded-lg transition-all   hover:border-transparent bg-yellow-400 px-4"
 			href={`/orgs/${data?.org?.id}`}>Back</a
 		>
 		<form method="post">
 			<input type="hidden" name="orgId" value={data?.org?.id} />
 			{#if showDelete}
 				<button
-					class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+					class="hover:rounded-lg transition-all   hover:border-transparent bg-red-400 px-4"
 					formaction="?/deleteOrg">DELETE ORGANIZATION - ARE YOU SURE?</button
 				>
 			{:else}
 				<button
-					class="inline bg-red-400 mt-10 p-2 text-sm hover:rounded-lg transition-all"
+					class="hover:rounded-lg transition-all   hover:border-transparent bg-red-400 px-4"
 					on:click|preventDefault={() => (showDelete = true)}
 				>
 					Delete Org
