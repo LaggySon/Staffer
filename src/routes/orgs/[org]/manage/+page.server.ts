@@ -19,8 +19,54 @@ export const actions = {
 		const logo = data.get('logo');
 		const description = data.get('description');
 		const contactInfo = data.get('contactInfo');
-		const socials = data.get('socials');
+		const socials = JSON.parse(data.get('socials'));
 		const orgId = data.get('orgId');
+
+		console.log(socials);
+
+		const currentSocials = await prisma.social.findMany({
+			where: {
+				organizationId: String(orgId)
+			}
+		});
+
+		currentSocials.forEach(async (social) => {
+			if (!socials.find((s: any) => s.id === social.id)) {
+				await prisma.social.delete({
+					where: {
+						id: social.id
+					}
+				});
+			}
+		});
+
+		//update socials
+		socials.map(async (social: any) => {
+			if (social.id === 'new') {
+				console.log('creating');
+				await prisma.social.create({
+					data: {
+						site: social.website,
+						handle: social.handle,
+						Organization: {
+							connect: {
+								id: String(orgId)
+							}
+						}
+					}
+				});
+			} else {
+				await prisma.social.update({
+					where: {
+						id: String(social.id)
+					},
+					data: {
+						site: String(social.website),
+						handle: String(social.handle)
+					}
+				});
+			}
+		});
 
 		const updateOrg = await prisma.organization.update({
 			where: {
@@ -34,52 +80,7 @@ export const actions = {
 			}
 		});
 	},
-	createSocial: async ({ request }: any) => {
-		const data = await request.formData();
-		const orgId = data.get('orgId');
 
-		const updateOrg = await prisma.organization.update({
-			where: {
-				id: String(orgId)
-			},
-			data: {
-				socials: {
-					create: {
-						site: '',
-						handle: ''
-					}
-				}
-			}
-		});
-	},
-	deleteSocial: async ({ request }: any) => {
-		const data = await request.formData();
-		const orgId = data.get('orgId');
-		const socialId = data.get('socialId');
-
-		const delSoc = await prisma.social.delete({
-			where: {
-				id: socialId
-			}
-		});
-	},
-	updateSocial: async ({ request }: any) => {
-		const data = await request.formData();
-
-		const site = data.get('site');
-		const handle = data.get('handle');
-		const socialId = data.get('socialId');
-
-		const updateSocial = await prisma.social.update({
-			where: {
-				id: String(socialId)
-			},
-			data: {
-				site,
-				handle
-			}
-		});
-	},
 	deleteOrg: async ({ request }: any) => {
 		const data = await request.formData();
 		const orgId = data.get('orgId');
