@@ -20,6 +20,7 @@
 	};
 
 	const positions: newPos[] = data?.eventData?.positions as newPos[];
+	console.log(positions);
 
 	let expand = '';
 
