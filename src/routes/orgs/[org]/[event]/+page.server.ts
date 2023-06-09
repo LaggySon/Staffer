@@ -198,9 +198,101 @@ export const actions = {
 		const name = data.get('name');
 		const location = data.get('location');
 		const date = data.get('date');
-		console.log(date);
-		console.log(dayjs(date).toDate());
 		const eventId = data.get('eventId');
+		const positions = JSON.parse(data.get('positions'));
+		const userEmail = data.get('userEmail');
+		const currentPositions = await prisma.position.findMany({
+			where: {
+				eventId: String(eventId)
+			}
+		});
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
+
+		currentPositions.forEach(async (position) => {
+			if (!positions.find((p: any) => p.id === position.id)) {
+				await prisma.position.delete({
+					where: {
+						id: position.id
+					}
+				});
+			}
+		});
+
+		positions.forEach(async (position: any) => {
+			let filledById = null;
+			if (!position.filledBy) {
+			} else {
+				const filledByObj = await prisma.user.findFirst({
+					where: {
+						email: position.filledBy.email
+					}
+				});
+				filledById = filledByObj?.id;
+			}
+
+			if (position.declared) {
+				const addUser = await prisma.userOnPosition.upsert({
+					where: {
+						positionId_userId: {
+							positionId: String(position.id),
+							userId: String(userId)
+						}
+					},
+					update: {},
+					create: {
+						position: {
+							connect: {
+								id: String(position.id)
+							}
+						},
+						user: {
+							connect: {
+								id: String(userId)
+							}
+						}
+					}
+				});
+			} else {
+				const removeUser = await prisma.userOnPosition.delete({
+					where: {
+						positionId_userId: {
+							positionId: String(position.id),
+							userId: String(userId)
+						}
+					}
+				});
+			}
+
+			if (position.id === 'new') {
+				const createPos = await prisma.position.create({
+					data: {
+						title: position.title,
+						compensation: position.compensation,
+						eventId: eventId,
+						userId: filledById,
+						filled: position.filled
+					}
+				});
+			} else {
+				const updatePos = await prisma.position.update({
+					where: {
+						id: position.id
+					},
+					data: {
+						title: position.title,
+						compensation: position.compensation,
+						eventId: eventId,
+						userId: filledById,
+						filled: position.filled
+					}
+				});
+			}
+		});
 
 		const updateOrg = await prisma.event.update({
 			where: {

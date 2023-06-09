@@ -14,8 +14,8 @@
 	export let data: any;
 
 	type fb = {
-		email: string;
-		name: string;
+		email: string | null;
+		name: string | null;
 	};
 
 	type newPos = Position & {
@@ -27,6 +27,8 @@
 	let positions: newPos[] = data?.eventData?.positions.map((pos: any) => {
 		return { ...pos, filledBy: { email: pos?.filledBy?.email, name: pos?.filledBy?.name } };
 	}) as newPos[];
+
+	$: jsonPositions = JSON.stringify(positions);
 
 	const createPosition = () => {
 		positions = [
@@ -57,6 +59,23 @@
 	const removeUser = (index: number) => {
 		positions[index].userId = null;
 		positions[index].filledBy = null;
+		positions[index].filled = false;
+		expand = '';
+	};
+
+	const fillPos = (index: number, freelancer: fb) => {
+		console.log(freelancer);
+		if (positions[index].filledBy?.email !== null) {
+			positions[index].filledBy!.email = freelancer.email;
+			positions[index].filledBy!.name = freelancer.name;
+		} else {
+			positions[index].filledBy = {
+				name: freelancer.name,
+				email: freelancer.email
+			};
+		}
+		positions[index].filled = true;
+		expand = '';
 	};
 
 	let expand = '';
@@ -71,6 +90,8 @@
 </script>
 
 <form method="post">
+	<input type="hidden" name="positions" value={jsonPositions} />
+	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
 	<div class="flex justify-center gap-4">
 		<a href={`/orgs/${data?.org?.id}`}>
 			<img src={data.org?.logo} height="100" width="100" alt="" />
@@ -129,8 +150,8 @@
 			<span class="text-lg font-bold">Compensation</span>
 		</div>
 
-		{#each positions as position, i}
-			<form class="grid grid-cols-3 my-2 border-b pb-2" method="POST">
+		{#each positions.sort((a, b) => a.title.localeCompare(b.title)) as position, i}
+			<div class="grid grid-cols-3 my-2 border-b pb-2">
 				<div class="flex justify-center flex-wrap items-center gap-2 relative">
 					{#if data.isManager}
 						<button
@@ -149,14 +170,15 @@
 							</div>
 							{#if expand === position.id}
 								<div class="absolute top-5 bg-slate-300 dark:bg-slate-800 z-10">
-									{#each position.freelancers as freelancer}
-										<input
+									{#each position.freelancers.filter((freelancer) => freelancer.name !== position.filledBy?.name) as freelancer}
+										<button
 											class="hover:bg-blue-400  hover:rounded-lg transition-all cursor-pointer"
-											type="submit"
-											value={freelancer.name}
-										/>
+											on:click|preventDefault={() =>
+												fillPos(i, { email: freelancer.email, name: freelancer.name })}
+											>{freelancer.name}</button
+										>
 									{/each}
-									{#if position.filledBy?.email}
+									{#if position.filled}
 										<button
 											class="hover:bg-red-400 p-1 hover:rounded-lg transition-all cursor-pointer"
 											on:click|preventDefault={() => removeUser(i)}>Remove Selection</button
@@ -167,13 +189,13 @@
 						</div>
 					{/if}
 
-					{#if !position.declared && !position.filledBy?.name}
+					{#if !position.declared && !position.filled}
 						<button
 							on:click|preventDefault={() => declarePosition(i)}
 							class=" cursor-pointer  bg-green-400 transition-all hover:rounded-lg px-2"
 							>Set Available</button
 						>
-					{:else if position.declared && !position.filledBy?.name}
+					{:else if position.declared && !position.filled}
 						<button
 							on:click|preventDefault={() => declarePosition(i)}
 							class=" cursor-pointer bg-orange-400 transition-all hover:rounded-lg px-2"
@@ -213,7 +235,7 @@
 					<span>{position.title}</span>
 					<span>{position.compensation}</span>
 				{/if}
-			</form>
+			</div>
 		{/each}
 
 		{#if data?.isManager}
