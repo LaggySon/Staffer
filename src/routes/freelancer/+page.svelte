@@ -27,7 +27,7 @@
 		<ul>
 			{#each orgs as org}
 				<li
-					class="text-gray-700 hover:text-white hover:bg-blue-400 bg-slate-300 p-2 m-2 max-w-lg mx-auto hover:rounded-lg transition-all"
+					class="text-gray-700 hover:text-white hover:bg-blue-400 bg-gray-300 p-2 m-2 max-w-lg mx-auto hover:rounded-lg transition-all"
 				>
 					<a href={`/orgs/${org?.id}`} class="flex items-center justify-center gap-2"
 						><img src={org?.logo} alt="" class="h-[2em]" /><span>{org?.name}</span></a
@@ -36,14 +36,14 @@
 			{/each}
 			<form action="?/join" method="POST">
 				<input
-					class="bg-slate-300 dark:bg-slate-800 outline-none p-2"
+					class="bg-gray-300 dark:bg-gray-800 outline-none p-2"
 					type="text"
 					name="orgCode"
 					id="orgcode"
 					bind:value={joinCode}
 				/>
 				<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
-				<input class="bg-slate-300 dark:bg-slate-800 p-2" type="submit" value="Join" />
+				<input class="bg-gray-300 dark:bg-gray-800 p-2" type="submit" value="Join" />
 			</form>
 			<li class="m-4">
 				<button

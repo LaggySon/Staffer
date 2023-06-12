@@ -22,7 +22,7 @@
 	<title>Staffer</title>
 </head>
 
-<div class="app font-Inter dark:bg-slate-700 dark:text-white">
+<div class="app font-Inter dark:bg-gray-700 dark:text-white">
 	<Header />
 
 	<main>
