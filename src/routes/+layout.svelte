@@ -19,6 +19,7 @@
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Righteous&display=swap"
 		rel="stylesheet"
 	/>
+	<title>Staffer</title>
 </head>
 
 <div class="app font-Inter dark:bg-slate-700 dark:text-white">
