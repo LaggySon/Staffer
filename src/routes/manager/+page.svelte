@@ -40,11 +40,11 @@
 	{/if}
 </div>
 {#if $page.data.session}
-<form method="post" class="my-10 flex">
-	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
-	<button
-		class="mx-auto text-3xl bg-slate-300 dark:bg-slate-800 p-2  cursor-pointer hover:bg-blue-400 hover:rounded-lg transition-all"
-		formaction="?/createOrg">Create an Organization</button
-	>
-</form>
+	<form method="post" class="my-10 flex">
+		<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
+		<button
+			class="mx-auto text-3xl bg-gray-300 dark:bg-gray-800 p-2  cursor-pointer hover:bg-blue-400 hover:rounded-lg transition-all"
+			formaction="?/createOrg">Create an Organization</button
+		>
+	</form>
 {/if}

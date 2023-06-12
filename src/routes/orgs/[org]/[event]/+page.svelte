@@ -155,21 +155,21 @@
 				<div class="flex justify-center flex-wrap items-center gap-2 relative">
 					{#if data.isManager}
 						<button
-							class="bg-slate-300 dark:bg-slate-800  cursor-pointer hover:bg-red-400 transition-all hover:rounded-lg p-1 "
+							class="bg-gray-300 dark:bg-gray-800  cursor-pointer hover:bg-red-400 transition-all hover:rounded-lg p-1 "
 							on:click|preventDefault={() => deletePosition(position)}
 							title="Delete Position"><Delete /></button
 						>
 						<div class="relative">
 							<div class="flex items-center">
 								<button
-									class="bg-slate-300 dark:bg-slate-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
+									class="bg-gray-300 dark:bg-gray-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
 									on:click|preventDefault={() =>
 										(expand = expand === position.id ? '' : position.id)}
 									title="Choose Freelancer"><ExpandMore /></button
 								>
 							</div>
 							{#if expand === position.id}
-								<div class="absolute top-5 bg-slate-300 dark:bg-slate-800 z-10">
+								<div class="absolute top-5 bg-gray-300 dark:bg-gray-800 z-10">
 									{#each position.freelancers.filter((freelancer) => freelancer.name !== position.filledBy?.name) as freelancer}
 										<button
 											class="hover:bg-blue-400  hover:rounded-lg transition-all cursor-pointer"
@@ -202,10 +202,9 @@
 							>Undo Available</button
 						>
 					{:else if position?.filledBy?.email === $page.data.session?.user?.email}
-						<span class="bg-slate-300 dark:bg-slate-800">Filled By You</span>
+						<span class="bg-gray-300 dark:bg-gray-800">Filled By You</span>
 					{:else}
-						<span class="bg-slate-300 dark:bg-slate-800">Filled By: {position?.filledBy?.name}</span
-						>
+						<span class="bg-gray-300 dark:bg-gray-800">Filled By: {position?.filledBy?.name}</span>
 					{/if}
 				</div>
 
@@ -241,7 +240,7 @@
 		{#if data?.isManager}
 			<button
 				on:click|preventDefault={() => createPosition()}
-				class="mt-5 bg-slate-300 dark:bg-slate-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+				class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
 				>Create Position</button
 			>
 
