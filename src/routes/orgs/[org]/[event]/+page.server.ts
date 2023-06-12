@@ -230,7 +230,7 @@ export const actions = {
 
 		positions.forEach(async (position: any) => {
 			let filledById = null;
-			if (!position.filledBy.email) {
+			if (!position?.filledBy?.email) {
 			} else {
 				const filledByObj = await prisma.user.findUnique({
 					where: {
