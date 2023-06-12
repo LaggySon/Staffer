@@ -213,26 +213,32 @@ export const actions = {
 		});
 		const userId = user?.id;
 
-		currentPositions.forEach(async (position) => {
-			if (!positions.find((p: any) => p.id === position.id)) {
-				await prisma.position.delete({
+		if (positions.length === 0) {
+			currentPositions.forEach(async (p) => {
+				await prisma.userOnPosition.deleteMany({
 					where: {
-						id: position.id
+						positionId: p.id
 					}
 				});
-			}
-		});
+			});
+			await prisma.position.deleteMany({
+				where: {
+					eventId: eventId
+				}
+			});
+		}
 
 		positions.forEach(async (position: any) => {
 			let filledById = null;
-			if (!position.filledBy) {
+			if (!position.filledBy.email) {
 			} else {
-				const filledByObj = await prisma.user.findFirst({
+				const filledByObj = await prisma.user.findUnique({
 					where: {
 						email: position.filledBy.email
 					}
 				});
 				filledById = filledByObj?.id;
+				console.log(filledById);
 			}
 
 			if (position.declared) {
@@ -257,7 +263,18 @@ export const actions = {
 						}
 					}
 				});
-			} else {
+			} else if (
+				await prisma.userOnPosition.findUnique({
+					where: {
+						positionId_userId: {
+							positionId: String(position.id),
+							userId: String(userId)
+						}
+					}
+				})
+			) {
+				console.log(`PosId: ${position.id}`);
+				console.log(`userId: ${userId}`);
 				const removeUser = await prisma.userOnPosition.delete({
 					where: {
 						positionId_userId: {
@@ -292,6 +309,22 @@ export const actions = {
 					}
 				});
 			}
+
+			currentPositions.forEach(async (position) => {
+				if (!positions.find((p: any) => p.id === position.id)) {
+					console.log(`Deleting ${position.id}`);
+					await prisma.userOnPosition.deleteMany({
+						where: {
+							positionId: position.id
+						}
+					});
+					await prisma.position.delete({
+						where: {
+							id: position.id
+						}
+					});
+				}
+			});
 		});
 
 		const updateOrg = await prisma.event.update({

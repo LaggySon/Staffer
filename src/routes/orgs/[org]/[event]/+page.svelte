@@ -126,7 +126,7 @@
 							value={dayjs(data?.eventData?.date).format('YYYY-MM-DDTHH:mm')}
 							required
 						/>
-						<span class="text-sm">({dayjs(data?.eventData?.date).format('z')})</span>
+						<span class="text-sm">({dayjs(0).format('z')})</span>
 					</p>
 				</div>
 				<input type="hidden" name="eventId" value={data?.eventData?.id} />
@@ -246,10 +246,12 @@
 			>
 
 			<input type="hidden" name="eventId" value={data.eventData.id} />
-			<button
-				formaction="?/updateEvent"
-				class="hover:rounded-lg transition-all mt-4 bg-blue-400 px-4">Save Changes</button
-			>
+		{/if}
+
+		<button formaction="?/updateEvent" class="hover:rounded-lg transition-all mt-4 bg-blue-400 px-4"
+			>Save Changes</button
+		>
+		{#if data?.isManager}
 			{#if showDelete}
 				<button
 					class="hover:rounded-lg transition-all mt-4 bg-red-400 px-4"
