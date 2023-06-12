@@ -27,6 +27,7 @@
 	let positions: newPos[] = data?.eventData?.positions.map((pos: any) => {
 		return { ...pos, filledBy: { email: pos?.filledBy?.email, name: pos?.filledBy?.name } };
 	}) as newPos[];
+	positions = positions.sort((a, b) => a.title.localeCompare(b.title));
 
 	$: jsonPositions = JSON.stringify(positions);
 
@@ -150,7 +151,7 @@
 			<span class="text-lg font-bold">Compensation</span>
 		</div>
 
-		{#each positions.sort((a, b) => a.title.localeCompare(b.title)) as position, i}
+		{#each positions as position, i}
 			<div class="grid grid-cols-3 my-2 border-b pb-2">
 				<div class="flex justify-center flex-wrap items-center gap-2 relative">
 					{#if data.isManager}
@@ -160,14 +161,16 @@
 							title="Delete Position"><Delete /></button
 						>
 						<div class="relative">
-							<div class="flex items-center">
-								<button
-									class="bg-gray-300 dark:bg-gray-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
-									on:click|preventDefault={() =>
-										(expand = expand === position.id ? '' : position.id)}
-									title="Choose Freelancer"><ExpandMore /></button
-								>
-							</div>
+							{#if position.freelancers.length > 0}
+								<div class="flex items-center">
+									<button
+										class="bg-gray-300 dark:bg-gray-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
+										on:click|preventDefault={() =>
+											(expand = expand === position.id ? '' : position.id)}
+										title="Choose Freelancer"><ExpandMore /></button
+									>
+								</div>
+							{/if}
 							{#if expand === position.id}
 								<div class="absolute top-5 bg-gray-300 dark:bg-gray-800 z-10">
 									{#each position.freelancers.filter((freelancer) => freelancer.name !== position.filledBy?.name) as freelancer}
