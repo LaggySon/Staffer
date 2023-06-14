@@ -138,6 +138,10 @@
 				<div class="text-center">
 					<p>Location: {data?.eventData?.location}</p>
 					<p>Time: {dayjs(data?.eventData?.date).format('MM/DD/YYYY @ HH:mm z')}</p>
+					<input type="hidden" name="location" value={data?.eventData?.location} />
+					<input type="hidden" name="date" value={data?.eventData?.date} />
+					<input type="hidden" name="name" value={data?.eventData?.name} />
+					<input type="hidden" name="eventId" value={data?.eventData?.id} />
 				</div>
 			</div>
 		{/if}
