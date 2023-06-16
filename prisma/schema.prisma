@@ -66,7 +66,7 @@ model VerificationToken {
 
 model Organization {
   id          String            @id @default(cuid())
-  name        String            @unique
+  name        String
   logo        String
   description String
   contactInfo String
@@ -92,6 +92,7 @@ model Event {
   date           DateTime      @db.Date
   Organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
+  description    String?
 }
 
 model Position {
