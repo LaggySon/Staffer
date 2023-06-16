@@ -4,9 +4,12 @@ import type { Position } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const actions = {
-	createEvent: async ({ request }) => {
+	createEvent: async ({ request }: any) => {
 		const data = await request.formData();
 		const orgId = data.get('orgId');
+		const name = data.get('name');
+		const location = data.get('location');
+		const date = new Date(data.get('date'));
 
 		const org = await prisma.organization.findUnique({
 			where: {
@@ -19,9 +22,9 @@ export const actions = {
 
 		const event = await prisma.event.create({
 			data: {
-				name: '',
-				location: '',
-				date: new Date(),
+				name: name,
+				location: location,
+				date: date,
 				Organization: {
 					connect: {
 						id: String(orgId)
@@ -29,8 +32,6 @@ export const actions = {
 				}
 			}
 		});
-
-		console.log(org);
 
 		throw redirect(302, `/orgs/${String(orgId)}/${event.id}`);
 	}
