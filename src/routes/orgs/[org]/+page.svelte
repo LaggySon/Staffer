@@ -37,7 +37,7 @@
 			</div>
 			{#if data.isManager}
 				<div
-					class="text-sm text-center cursor-pointer bg-slate-300 dark:bg-slate-800 hover:rounded-lg transition-all p-1"
+					class="text-sm text-center cursor-pointer bg-gray-300 dark:bg-gray-800 hover:rounded-lg transition-all p-1"
 					on:keydown={() => showCode()}
 					on:click={() => showCode()}
 				>
@@ -73,6 +73,7 @@
 		{#if data?.isManager}
 			<form method="POST">
 				<input type="hidden" name="orgId" value={org?.id} />
+
 				{#if !showCreateEvent}
 					<button
 						on:click={() => (showCreateEvent = !showCreateEvent)}
@@ -107,6 +108,7 @@
 						formaction="?/createEvent">Create</button
 					>
 				{/if}
+
 			</form>
 		{/if}
 	</div>
