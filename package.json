@@ -52,7 +52,9 @@
 		"@fontsource/roboto-slab": "^4.5.11",
 		"@next-auth/prisma-adapter": "^1.0.5",
 		"@prisma/client": "^4.12.0",
+		"@types/marked": "^5.0.0",
 		"dayjs": "^1.11.7",
+		"marked": "^5.1.0",
 		"sass": "^1.59.2"
 	}
 }

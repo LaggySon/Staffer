@@ -7,6 +7,7 @@
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import Delete from '$lib/delete.svelte';
 	import Check from '$lib/check.svelte';
+	import { marked } from 'marked';
 
 	dayjs.extend(timezone);
 	dayjs.extend(advancedFormat);
@@ -30,6 +31,7 @@
 	positions = positions.sort((a, b) => a.title.localeCompare(b.title));
 
 	$: jsonPositions = JSON.stringify(positions);
+	let description = String(data?.eventData?.description);
 
 	const createPosition = () => {
 		positions = [
@@ -80,8 +82,8 @@
 	};
 
 	let expand = '';
-
 	let showDelete = false;
+	let editDesc = false;
 
 	const handleDelete = () => {
 		if (!showDelete) {
@@ -98,7 +100,7 @@
 			<img src={data.org?.logo} height="100" width="100" alt="" />
 		</a>
 
-		{#if data?.isManager}
+		{#if editDesc}
 			<div class="flex items-center flex-col [&>input]:bg-transparent [&>input]:border-b">
 				<input
 					type="text"
@@ -108,7 +110,7 @@
 					placeholder="Event Title"
 					required
 				/>
-				<div class="text-center ">
+				<div class="text-center flex flex-col gap-2">
 					<p>
 						Location: <input
 							class="bg-transparent border-b outline-none"
@@ -129,7 +131,31 @@
 						/>
 						<span class="text-sm">({dayjs(0).format('z')})</span>
 					</p>
+					<div class="flex">
+						{#if editDesc}
+							<p class="flex">
+								<label for="description">Description: </label>
+								<textarea
+									class="bg-transparent border w-96"
+									name="description"
+									id="description"
+									cols="30"
+									rows="10"
+									bind:value={description}
+								/>
+							</p>
+						{/if}
+					</div>
 				</div>
+
+				{#if data?.isManager}
+					<button
+						class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+						on:click|preventDefault={() => (editDesc = !editDesc)}
+						>{!editDesc ? 'Edit description' : 'Stop editing'}</button
+					>
+				{/if}
+
 				<input type="hidden" name="eventId" value={data?.eventData?.id} />
 			</div>
 		{:else}
@@ -142,6 +168,17 @@
 					<input type="hidden" name="date" value={data?.eventData?.date} />
 					<input type="hidden" name="name" value={data?.eventData?.name} />
 					<input type="hidden" name="eventId" value={data?.eventData?.id} />
+					<input type="hidden" name="description" value={description} />
+					<p class="p-2 border w-96">
+						{@html marked(description, { mangle: false, headerIds: false })}
+					</p>
+					{#if data?.isManager}
+						<button
+							class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							on:click|preventDefault={() => (editDesc = !editDesc)}
+							>{!editDesc ? 'Edit description' : 'Stop editing'}</button
+						>
+					{/if}
 				</div>
 			</div>
 		{/if}
