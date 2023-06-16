@@ -1,10 +1,12 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
 	import Event from './Event.svelte';
 	export let data;
 	const events = data.events;
 	const org: any = data.org;
 
 	let viewCode = false;
+	let showCreateEvent = false;
 
 	function showCode() {
 		viewCode = !viewCode;
@@ -71,11 +73,40 @@
 		{#if data?.isManager}
 			<form method="POST">
 				<input type="hidden" name="orgId" value={org?.id} />
-				<button
-					formaction="?/createEvent"
-					class="w-full z-0 bg-slate-300 cursor-pointer dark:bg-slate-800 transition-all overflow-hidden before:w-0 before:bg-blue-400 before:absolute hover:before:w-full before:h-10 before:transition-all before:duration-300 before:left-1/2 hover:before:left-0"
-					><span class="z-20">+</span></button
-				>
+				{#if !showCreateEvent}
+					<button
+						on:click={() => (showCreateEvent = !showCreateEvent)}
+						class="w-full z-0 bg-slate-300 cursor-pointer dark:bg-slate-800 transition-all overflow-hidden before:w-0 before:bg-blue-400 before:absolute hover:before:w-full before:h-10 before:transition-all before:duration-300 before:left-1/2 hover:before:left-0"
+						><span class="z-20">+</span></button
+					>
+				{:else}
+					<div class="w-full grid grid-cols-3 gap-2">
+						<input
+							class="bg-transparent border-b outline-none text-center"
+							type="text"
+							name="location"
+							id="newlocation"
+							required
+						/>
+						<input
+							class="bg-transparent border-b outline-none text-center"
+							type="text"
+							name="name"
+							id="newname"
+							required
+						/>
+						<input
+							class="bg-transparent border-b outline-none"
+							type="datetime-local"
+							name="date"
+							required
+						/>
+					</div>
+					<button
+						class="bg-slate-300 dark:bg-slate-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
+						formaction="?/createEvent">Create</button
+					>
+				{/if}
 			</form>
 		{/if}
 	</div>
