@@ -31,7 +31,7 @@
 	positions = positions.sort((a, b) => a.title.localeCompare(b.title));
 
 	$: jsonPositions = JSON.stringify(positions);
-	let description = data?.eventData?.description;
+	let description = String(data?.eventData?.description);
 
 	const createPosition = () => {
 		positions = [
@@ -136,7 +136,7 @@
 							<p class="flex">
 								<label for="description">Description: </label>
 								<textarea
-									class="bg-transparent border w-72"
+									class="bg-transparent border w-96"
 									name="description"
 									id="description"
 									cols="30"
@@ -168,8 +168,9 @@
 					<input type="hidden" name="date" value={data?.eventData?.date} />
 					<input type="hidden" name="name" value={data?.eventData?.name} />
 					<input type="hidden" name="eventId" value={data?.eventData?.id} />
-					<p class="p-2 border w-72">
-						{@html marked(description)}
+					<input type="hidden" name="description" value={description} />
+					<p class="p-2 border w-96">
+						{@html marked(description, { mangle: false, headerIds: false })}
 					</p>
 					{#if data?.isManager}
 						<button
