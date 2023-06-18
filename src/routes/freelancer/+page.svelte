@@ -27,7 +27,7 @@
 		<ul class="flex flex-wrap justify-center items-center">
 			{#each orgs as org}
 				<li
-					class="text-gray-700 hover:text-white hover:bg-blue-400 bg-gray-300 p-2 m-2 mx-auto hover:rounded-lg transition-all"
+					class="text-gray-700 hover:text-white hover:bg-blue-400 bg-gray-300 p-2 m-2 hover:rounded-lg transition-all"
 					title={org.name}
 				>
 					<a href={`/orgs/${org?.id}`} class="flex flex-col items-center justify-center gap-2"
