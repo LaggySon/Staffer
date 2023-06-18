@@ -17,7 +17,13 @@
 <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 	<div class="text-3xl flex justify-center items-center gap-2 flex-col mb-10 ">
 		<div class="text-3xl flex justify-center items-center gap-2 flex-col">
-			<a href={`/orgs/${data?.org?.name}`}><img src={org?.logo} alt="" class="h-[4em]" /></a>
+			<a href={`/orgs/${data?.org?.name}`}
+				><img
+					src={org?.logo === '' ? '/android-chrome-512x512.png' : org?.logo}
+					alt=""
+					class="h-[4em]"
+				/></a
+			>
 
 			<h1 class="text-center ">{org?.name}</h1>
 			<div class="w-full flex flex-wrap flex-row justify-center [&>*]:m-2 [&>*]:p-2 [&>*]:w-full">
@@ -108,7 +114,6 @@
 						formaction="?/createEvent">Create</button
 					>
 				{/if}
-
 			</form>
 		{/if}
 	</div>
