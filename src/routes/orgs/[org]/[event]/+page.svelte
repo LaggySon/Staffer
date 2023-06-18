@@ -97,7 +97,12 @@
 	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
 	<div class="flex justify-center gap-4">
 		<a href={`/orgs/${data?.org?.id}`}>
-			<img src={data.org?.logo} height="100" width="100" alt="" />
+			<img
+				src={data.org?.logo === '' ? '/android-chrome-512x512.png' : data.org?.logo}
+				height="100"
+				width="100"
+				alt=""
+			/>
 		</a>
 
 		{#if editDesc}
