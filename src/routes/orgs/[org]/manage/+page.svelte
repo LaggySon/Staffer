@@ -46,11 +46,11 @@
 	<h1 class=" text-xl ">Managing {name === '' ? 'a new organization' : name}</h1>
 </div>
 
-<div class="flex justify-center">
+<div class="flex justify-center flex-wrap gap-10">
 	<form
 		action="?/update"
 		method="post"
-		class=" flex flex-col grow  gap-4 justify-center items-center "
+		class=" flex flex-col grow  gap-4 justify-center items-center max-w-[95vw]"
 	>
 		<input type="hidden" name="orgId" value={data?.org?.id} />
 		<div class="flex flex-col w-full max-w-xl">
@@ -148,7 +148,7 @@
 	<div class="grow ">
 		<p>User Management</p>
 		<ul class="flex flex-col justify-center text-center border border-gray-600">
-			<div class="grid grid-cols-3 w-3/4 text-center mx-auto">
+			<div class="grid grid-cols-3 w-full lg:w-3/4 text-center mx-auto">
 				<p>Actions</p>
 				<p>Name</p>
 				<p>Title</p>
@@ -156,7 +156,7 @@
 			{#each freelancers as freelancer}
 				<form
 					method="post"
-					class=" m-2 mx-auto grid grid-cols-3 w-3/4 shadow-md border border-gray-600 p-2"
+					class=" m-2 mx-auto grid grid-cols-3 w-full lg:w-3/4 shadow-md border border-gray-600 p-2"
 				>
 					<input type="hidden" name="userId" value={freelancer.id} />
 					<input type="hidden" name="orgId" value={data?.org?.id} />
