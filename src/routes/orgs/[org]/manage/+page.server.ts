@@ -6,6 +6,35 @@ const prisma = new PrismaClient();
 export const load = async ({ params, parent }: any) => {
 	const { session } = await parent();
 	const { isManager } = await parent();
+	const orgId = params.org;
+	const freelancers = await prisma.orgOnFreelancer.findMany({
+		where: {
+			organizationId: orgId
+		},
+		select: {
+			user: true
+		}
+	});
+	return {
+		freelancers: await Promise.all(
+			freelancers.map(async (f) => {
+				return {
+					...f.user,
+					title:
+						(await prisma.orgOnManager.findUnique({
+							where: {
+								organizationId_userId: {
+									userId: f.user.id,
+									organizationId: orgId
+								}
+							}
+						})) === null
+							? 'freelancer'
+							: 'manager'
+				};
+			})
+		)
+	};
 	if (!isManager) {
 		throw redirect(302, '/');
 	}
@@ -104,5 +133,56 @@ export const actions = {
 		});
 
 		throw redirect(302, '/');
+	},
+
+	removeFreelancer: async ({ request }: any) => {
+		const data = await request.formData();
+		const userId = data.get('userId');
+		const orgId = data.get('orgId');
+
+		await prisma.orgOnFreelancer.delete({
+			where: {
+				organizationId_userId: {
+					organizationId: orgId,
+					userId
+				}
+			}
+		});
+	},
+
+	promoteFreelancer: async ({ request }: any) => {
+		const data = await request.formData();
+		const userId = data.get('userId');
+		const orgId = data.get('orgId');
+		console.log('promoting');
+
+		await prisma.orgOnManager.upsert({
+			where: {
+				organizationId_userId: {
+					organizationId: orgId,
+					userId: userId
+				}
+			},
+			create: {
+				organizationId: orgId,
+				userId: userId
+			},
+			update: {}
+		});
+	},
+
+	demoteFreelancer: async ({ request }: any) => {
+		const data = await request.formData();
+		const userId = data.get('userId');
+		const orgId = data.get('orgId');
+
+		await prisma.orgOnManager.delete({
+			where: {
+				organizationId_userId: {
+					organizationId: orgId,
+					userId: userId
+				}
+			}
+		});
 	}
 };

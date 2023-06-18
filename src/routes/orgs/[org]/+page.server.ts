@@ -34,5 +34,25 @@ export const actions = {
 		});
 
 		throw redirect(302, `/orgs/${String(orgId)}/${event.id}`);
+	},
+	leaveOrg: async ({ request }: any) => {
+		const data = await request.formData();
+		const orgId = data.get('orgId');
+		const userEmail = data.get('userEmail');
+		const user = await prisma.user.findUnique({
+			where: {
+				email: String(userEmail)
+			}
+		});
+		const userId = user?.id;
+
+		await prisma.orgOnFreelancer.delete({
+			where: {
+				organizationId_userId: {
+					organizationId: orgId,
+					userId: String(userId)
+				}
+			}
+		});
 	}
 };
