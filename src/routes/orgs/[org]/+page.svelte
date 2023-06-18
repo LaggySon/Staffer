@@ -1,7 +1,9 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
 	import Event from './Event.svelte';
+	import { page } from '$app/stores';
 	export let data;
+
 	const events = data.events;
 	const org: any = data.org;
 
@@ -60,6 +62,15 @@
 					class="bg-red-400 text-sm text-center cursor-pointer hover:rounded-lg transition-all p-1"
 					href={`/orgs/${org?.id}/manage`}>Manage {org?.name}</a
 				>
+			{:else}
+				<form method="post">
+					<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
+					<input type="hidden" name="orgId" value={data?.org?.id} />
+					<button
+						class="bg-red-400 text-sm text-center cursor-pointer hover:rounded-lg transition-all p-1"
+						formaction="?/leaveOrg">Leave Org</button
+					>
+				</form>
 			{/if}
 		</div>
 	</div>
