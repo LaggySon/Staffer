@@ -174,7 +174,7 @@
 					<input type="hidden" name="name" value={data?.eventData?.name} />
 					<input type="hidden" name="eventId" value={data?.eventData?.id} />
 					<input type="hidden" name="description" value={description} />
-					<p class="p-2 border w-96">
+					<p class="p-2 text-left border w-96 dark:prose-invert prose ">
 						{@html marked(description, { mangle: false, headerIds: false })}
 					</p>
 					{#if data?.isManager}
