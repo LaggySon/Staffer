@@ -70,6 +70,7 @@ model Organization {
   logo        String
   description String
   contactInfo String
+  private     Boolean?
   socials     Social[]
   events      Event[]
   freelancers OrgOnFreelancer[]
@@ -89,7 +90,8 @@ model Event {
   name           String
   location       String
   positions      Position[]
-  date           DateTime      @db.Date
+  startAt        DateTime
+  endAt          DateTime
   Organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
   description    String?

@@ -116,7 +116,7 @@
 						<input
 							class="bg-transparent border-b outline-none"
 							type="datetime-local"
-							name="date"
+							name="startAt"
 							required
 						/>
 					</div>
