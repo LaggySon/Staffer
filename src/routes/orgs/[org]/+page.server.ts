@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { redirect } from '@sveltejs/kit';
 import type { Position } from '@prisma/client';
+import dayjs from 'dayjs';
 const prisma = new PrismaClient();
 
 export const actions = {
@@ -9,7 +10,8 @@ export const actions = {
 		const orgId = data.get('orgId');
 		const name = data.get('name');
 		const location = data.get('location');
-		const date = new Date(data.get('date'));
+		const startAt = data.get('startAt');
+		// const endAt = data.get('endAt');
 
 		const org = await prisma.organization.findUnique({
 			where: {
@@ -24,7 +26,9 @@ export const actions = {
 			data: {
 				name: name,
 				location: location,
-				date: date,
+				startAt: dayjs(startAt).toDate(),
+				endAt: dayjs(startAt).toDate(),
+
 				Organization: {
 					connect: {
 						id: String(orgId)
