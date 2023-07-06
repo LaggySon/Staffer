@@ -90,6 +90,12 @@
 			showDelete = true;
 		}
 	};
+
+	$: gcal = `https://calendar.google.com/calendar/r/eventedit?text=${
+		data?.eventData?.name
+	}&dates=${dayjs(data?.eventData?.startAt).toISOString()}/${dayjs(
+		data?.eventData?.endAt
+	).toISOString()}&location=${location}`;
 </script>
 
 <form method="post">
@@ -178,6 +184,12 @@
 							<p>End Time:</p>
 							{dayjs(data?.eventData?.endAt).format('MM/DD/YYYY @ HH:mm z')}
 						</div>
+					</div>
+					<div class="mb-2">
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={gcal}>Add to Google Calendar</a
+						>
 					</div>
 					<input type="hidden" name="location" value={data?.eventData?.location} />
 					<input type="hidden" name="startAt" value={data?.eventData?.startAt} />
