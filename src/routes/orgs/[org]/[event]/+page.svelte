@@ -4,13 +4,17 @@
 	import { page } from '$app/stores';
 	import ExpandMore from '$lib/expandMore.svelte';
 	import timezone from 'dayjs/plugin/timezone';
+	import utc from 'dayjs/plugin/utc';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import Delete from '$lib/delete.svelte';
 	import Check from '$lib/check.svelte';
 	import { marked } from 'marked';
+	import * as ics from 'ics';
+	import { createBrotliCompress } from 'zlib';
 
 	dayjs.extend(timezone);
 	dayjs.extend(advancedFormat);
+	dayjs.extend(utc);
 
 	export let data: any;
 
@@ -84,6 +88,7 @@
 	let expand = '';
 	let showDelete = false;
 	let editDesc = false;
+	let location = data?.eventData?.location;
 
 	const handleDelete = () => {
 		if (!showDelete) {
@@ -91,11 +96,36 @@
 		}
 	};
 
-	$: gcal = `https://calendar.google.com/calendar/r/eventedit?text=${
-		data?.eventData?.name
-	}&dates=${dayjs(data?.eventData?.startAt).toISOString()}/${dayjs(
-		data?.eventData?.endAt
-	).toISOString()}&location=${location}`;
+	$: startTime = dayjs(data?.eventData?.startAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	$: endTime = dayjs(data?.eventData?.endAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	$: gcal = `https://calendar.google.com/calendar/r/eventedit?text=${data?.eventData?.name}&dates=${startTime}/${endTime}&location=${location}`;
+
+	function generateICSFile(startISOString, endISOString) {
+  // Convert start and end ISO strings to Date objects
+  const startDate = new Date(startISOString);
+  const endDate = new Date(endISOString);
+
+  // Format dates for iCalendar
+  const formattedStartDate = startDate.toISOString().replace(/[:-]/g, '');
+  const formattedEndDate = endDate.toISOString().replace(/[:-]/g, '');
+
+  // Generate iCalendar file content
+  const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//My Calendar//EN
+BEGIN:VEVENT
+DTSTART:${formattedStartDate}
+DTEND:${formattedEndDate}
+SUMMARY:Event Title
+DESCRIPTION:Event Description
+END:VEVENT
+END:VCALENDAR`;
+
+  return icsContent;
+}
+
 </script>
 
 <form method="post">
@@ -191,6 +221,10 @@
 							href={gcal}>Add to Google Calendar</a
 						>
 					</div>
+					<button
+						class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+						on:click={() => }>Create ics</button
+					>
 					<input type="hidden" name="location" value={data?.eventData?.location} />
 					<input type="hidden" name="startAt" value={data?.eventData?.startAt} />
 					<input type="hidden" name="endAt" value={data?.eventData?.endAt} />
