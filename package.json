@@ -57,7 +57,6 @@
 		"dayjs": "^1.11.7",
 		"ics": "^3.2.0",
 		"marked": "^5.1.0",
-		"react-add-to-calendar": "^0.1.5",
 		"sass": "^1.59.2"
 	}
 }

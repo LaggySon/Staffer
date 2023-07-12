@@ -10,13 +10,15 @@
 	import Check from '$lib/check.svelte';
 	import { marked } from 'marked';
 	import * as ics from 'ics';
-	import { createBrotliCompress } from 'zlib';
+	import helpers from '$lib/CalLinks';
 
 	dayjs.extend(timezone);
 	dayjs.extend(advancedFormat);
 	dayjs.extend(utc);
 
 	export let data: any;
+
+	const help: any = new helpers();
 
 	type fb = {
 		email: string | null;
@@ -100,32 +102,19 @@
 
 	$: endTime = dayjs(data?.eventData?.endAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
 
-	$: gcal = `https://calendar.google.com/calendar/r/eventedit?text=${data?.eventData?.name}&dates=${startTime}/${endTime}&location=${location}`;
-
-	function generateICSFile(startISOString, endISOString) {
-  // Convert start and end ISO strings to Date objects
-  const startDate = new Date(startISOString);
-  const endDate = new Date(endISOString);
-
-  // Format dates for iCalendar
-  const formattedStartDate = startDate.toISOString().replace(/[:-]/g, '');
-  const formattedEndDate = endDate.toISOString().replace(/[:-]/g, '');
-
-  // Generate iCalendar file content
-  const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//My Calendar//EN
-BEGIN:VEVENT
-DTSTART:${formattedStartDate}
-DTEND:${formattedEndDate}
-SUMMARY:Event Title
-DESCRIPTION:Event Description
-END:VEVENT
-END:VCALENDAR`;
-
-  return icsContent;
-}
-
+	const getUrl = (site: string) => {
+		return help.buildUrl(
+			{
+				startTime: dayjs(data?.eventData?.startAt),
+				endTime: dayjs(data.eventData?.endAt),
+				description,
+				location,
+				title: data?.eventData?.name
+			},
+			site,
+			false
+		);
+	};
 </script>
 
 <form method="post">
@@ -218,13 +207,15 @@ END:VCALENDAR`;
 					<div class="mb-2">
 						<a
 							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
-							href={gcal}>Add to Google Calendar</a
+							href={getUrl('google')}>Add to Google Calendar</a
+						>
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={getUrl('outlookcom')}>Add to Outlook Calendar</a
 						>
 					</div>
-					<button
-						class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
-						on:click={() => }>Create ics</button
-					>
+					<div class="mb-2" />
+
 					<input type="hidden" name="location" value={data?.eventData?.location} />
 					<input type="hidden" name="startAt" value={data?.eventData?.startAt} />
 					<input type="hidden" name="endAt" value={data?.eventData?.endAt} />
