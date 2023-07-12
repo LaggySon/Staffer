@@ -84,7 +84,7 @@
 
 		{#each events as event}
 			<a href={`/orgs/${org?.id}/${event?.id}`}>
-				<Event name={event.name} location={event.location} date={String(event.date)} />
+				<Event name={event.name} location={event.location} date="" />
 			</a>
 		{/each}
 		{#if data?.isManager}

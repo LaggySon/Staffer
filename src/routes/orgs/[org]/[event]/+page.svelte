@@ -4,15 +4,21 @@
 	import { page } from '$app/stores';
 	import ExpandMore from '$lib/expandMore.svelte';
 	import timezone from 'dayjs/plugin/timezone';
+	import utc from 'dayjs/plugin/utc';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import Delete from '$lib/delete.svelte';
 	import Check from '$lib/check.svelte';
 	import { marked } from 'marked';
+	import * as ics from 'ics';
+	import helpers from '$lib/CalLinks';
 
 	dayjs.extend(timezone);
 	dayjs.extend(advancedFormat);
+	dayjs.extend(utc);
 
 	export let data: any;
+
+	const help: any = new helpers();
 
 	type fb = {
 		email: string | null;
@@ -84,11 +90,30 @@
 	let expand = '';
 	let showDelete = false;
 	let editDesc = false;
+	let location = data?.eventData?.location;
 
 	const handleDelete = () => {
 		if (!showDelete) {
 			showDelete = true;
 		}
+	};
+
+	$: startTime = dayjs(data?.eventData?.startAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	$: endTime = dayjs(data?.eventData?.endAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	const getUrl = (site: string) => {
+		return help.buildUrl(
+			{
+				startTime: dayjs(data?.eventData?.startAt),
+				endTime: dayjs(data.eventData?.endAt),
+				description,
+				location,
+				title: data?.eventData?.name
+			},
+			site,
+			false
+		);
 	};
 </script>
 
@@ -179,6 +204,18 @@
 							{dayjs(data?.eventData?.endAt).format('MM/DD/YYYY @ HH:mm z')}
 						</div>
 					</div>
+					<div class="mb-2">
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={getUrl('google')}>Add to Google Calendar</a
+						>
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={getUrl('outlookcom')}>Add to Outlook Calendar</a
+						>
+					</div>
+					<div class="mb-2" />
+
 					<input type="hidden" name="location" value={data?.eventData?.location} />
 					<input type="hidden" name="startAt" value={data?.eventData?.startAt} />
 					<input type="hidden" name="endAt" value={data?.eventData?.endAt} />
