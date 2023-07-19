@@ -84,7 +84,11 @@
 
 		{#each events as event}
 			<a href={`/orgs/${org?.id}/${event?.id}`}>
-				<Event name={event.name} location={event.location} date="" />
+				<Event
+					name={event.name}
+					location={event.location}
+					date={dayjs(event.startAt).format('MM/DD/YYYY @ HH:mm z')}
+				/>
 			</a>
 		{/each}
 		{#if data?.isManager}

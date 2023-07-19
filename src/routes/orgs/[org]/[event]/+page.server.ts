@@ -203,6 +203,7 @@ export const actions = {
 		const positions = JSON.parse(data.get('positions'));
 		const userEmail = data.get('userEmail');
 		const description = data.get('description');
+
 		const currentPositions = await prisma.position.findMany({
 			where: {
 				eventId: String(eventId)
