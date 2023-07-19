@@ -13,5 +13,18 @@ export const load = async ({ params, parent }: any) => {
 		}
 	});
 
-	return { user };
+	const events = await prisma.event.findMany({
+		include: {
+			positions: {
+				where: {
+					userId
+				},
+				include:
+			}
+		}
+	});
+
+	console.log(events);
+
+	return { user, events };
 };
