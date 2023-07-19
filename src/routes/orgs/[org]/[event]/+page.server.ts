@@ -197,11 +197,13 @@ export const actions = {
 
 		const name = data.get('name');
 		const location = data.get('location');
-		const date = data.get('date');
+		const startAt = data.get('startAt');
+		const endAt = data.get('endAt');
 		const eventId = data.get('eventId');
 		const positions = JSON.parse(data.get('positions'));
 		const userEmail = data.get('userEmail');
 		const description = data.get('description');
+
 		const currentPositions = await prisma.position.findMany({
 			where: {
 				eventId: String(eventId)
@@ -335,7 +337,8 @@ export const actions = {
 			data: {
 				name,
 				location,
-				date: dayjs(date).toDate(),
+				startAt: dayjs(startAt).toDate(),
+				endAt: dayjs(endAt).toDate(),
 				description
 			}
 		});

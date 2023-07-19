@@ -4,15 +4,20 @@
 	import { page } from '$app/stores';
 	import ExpandMore from '$lib/expandMore.svelte';
 	import timezone from 'dayjs/plugin/timezone';
+	import utc from 'dayjs/plugin/utc';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import Delete from '$lib/delete.svelte';
 	import Check from '$lib/check.svelte';
 	import { marked } from 'marked';
+	import helpers from '$lib/CalLinks';
 
 	dayjs.extend(timezone);
 	dayjs.extend(advancedFormat);
+	dayjs.extend(utc);
 
 	export let data: any;
+
+	const help: any = new helpers();
 
 	type fb = {
 		email: string | null;
@@ -84,104 +89,151 @@
 	let expand = '';
 	let showDelete = false;
 	let editDesc = false;
+	let location = data?.eventData?.location;
+	let startAt = dayjs(data?.eventData?.startAt).format('YYYY-MM-DDTHH:mm');
+	let endAt = dayjs(data?.eventData?.endAt).format('YYYY-MM-DDTHH:mm');
+	let title = data?.eventData?.name;
 
 	const handleDelete = () => {
 		if (!showDelete) {
 			showDelete = true;
 		}
 	};
+
+	$: startTime = dayjs(data?.eventData?.startAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	$: endTime = dayjs(data?.eventData?.endAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
+
+	const getUrl = (site: string) => {
+		return help.buildUrl(
+			{
+				startTime: dayjs(data?.eventData?.startAt),
+				endTime: dayjs(data.eventData?.endAt),
+				description,
+				location,
+				title: data?.eventData?.name
+			},
+			site,
+			false
+		);
+	};
 </script>
 
 <form method="post">
 	<input type="hidden" name="positions" value={jsonPositions} />
 	<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
-	<div class="flex justify-center gap-4">
-		<a href={`/orgs/${data?.org?.id}`}>
-			<img
-				src={data.org?.logo === '' ? '/android-chrome-512x512.png' : data.org?.logo}
-				height="100"
-				width="100"
-				alt=""
-			/>
-		</a>
 
+	<div class="flex justify-center gap-4 w-full">
 		{#if editDesc}
-			<div class="flex items-center flex-col [&>input]:bg-transparent [&>input]:border-b">
+			<div class="flex items-center flex-col [&>input]:bg-transparent [&>input]:border-b w-full ">
 				<input
 					type="text"
-					value={data?.eventData?.name}
+					bind:value={title}
 					name="name"
-					class="text-center text-3xl outline-none"
+					class="text-center text-3xl outline-none border-gray-600"
 					placeholder="Event Title"
 					required
 				/>
 				<div class="text-center flex flex-col gap-2">
 					<p>
 						Location: <input
-							class="bg-transparent border-b outline-none"
+							class="bg-transparent border-b border-gray-600 outline-none"
 							type="text"
 							name="location"
-							value={data?.eventData?.location}
+							bind:value={location}
 							required
 							placeholder="Event Location"
 						/>
 					</p>
-					<p>
-						Time: <input
-							class="bg-transparent border-b outline-none"
-							type="datetime-local"
-							name="date"
-							value={dayjs(data?.eventData?.date).format('YYYY-MM-DDTHH:mm')}
-							required
-						/>
-						<span class="text-sm">({dayjs(0).format('z')})</span>
-					</p>
-					<div class="flex">
-						{#if editDesc}
-							<p class="flex">
-								<label for="description">Description: </label>
-								<textarea
-									class="bg-transparent border w-96"
-									name="description"
-									id="description"
-									cols="30"
-									rows="10"
-									bind:value={description}
-								/>
-							</p>
-						{/if}
+
+					<div class="flex gap-2 mb-2">
+						<div class="border border-gray-600 m-2 p-2">
+							<p>Start Time:</p>
+							<input
+								class="bg-transparent border-b border-gray-600 outline-none bg-gray-800"
+								type="datetime-local"
+								name="startAt"
+								bind:value={startAt}
+								required
+							/>
+							<span class="text-sm">({dayjs(startAt).format('z')})</span>
+						</div>
+						<div class="border border-gray-600 m-2 p-2">
+							<p>End Time:</p>
+							<input
+								class="bg-transparent border-b border-gray-600 outline-none bg-gray-800"
+								type="datetime-local"
+								name="endAt"
+								bind:value={endAt}
+								required
+							/>
+							<span class="text-sm">({dayjs(endAt).format('z')})</span>
+						</div>
 					</div>
 				</div>
-
+				{#if editDesc}
+					<p class="flex w-full">
+						<textarea
+							class="bg-transparent border border-gray-600 w-full h-96 p-2 font-mono"
+							name="description"
+							id="description"
+							bind:value={description}
+						/>
+					</p>
+				{/if}
 				{#if data?.isManager}
 					<button
-						class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+						class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-yellow-400 hover:rounded-lg transition-all p-1"
 						on:click|preventDefault={() => (editDesc = !editDesc)}
-						>{!editDesc ? 'Edit description' : 'Stop editing'}</button
+						>{!editDesc ? 'Edit' : 'Done'}</button
 					>
 				{/if}
 
 				<input type="hidden" name="eventId" value={data?.eventData?.id} />
 			</div>
 		{:else}
-			<div class="flex items-center flex-col">
-				<h1 class="text-center text-3xl">{data?.eventData?.name}</h1>
-				<div class="text-center">
-					<p>Location: {data?.eventData?.location}</p>
-					<p>Time: {dayjs(data?.eventData?.date).format('MM/DD/YYYY @ HH:mm z')}</p>
+			<div class="flex items-center flex-col w-full">
+				<h1 class="text-center text-3xl">{title}</h1>
+				<div class="text-center w-full">
+					<p>Location: {location}</p>
+					<div class="flex gap-2 justify-center">
+						<div class="border border-gray-600 m-2 p-2">
+							<p>Start Time:</p>
+							{dayjs(startAt).format('MM/DD/YYYY @ HH:mm z')}
+						</div>
+						<div class="border border-gray-600 m-2 p-2">
+							<p>End Time:</p>
+							{dayjs(endAt).format('MM/DD/YYYY @ HH:mm z')}
+						</div>
+					</div>
+					<div class="mb-2">
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={getUrl('google')}>Add to Google Calendar</a
+						>
+						<a
+							class=" bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							href={getUrl('outlookcom')}>Add to Outlook Calendar</a
+						>
+					</div>
+					<div class="mb-2" />
+
 					<input type="hidden" name="location" value={data?.eventData?.location} />
-					<input type="hidden" name="date" value={data?.eventData?.date} />
+					<input type="hidden" name="startAt" bind:value={startAt} />
+					<input type="hidden" name="endAt" bind:value={endAt} />
 					<input type="hidden" name="name" value={data?.eventData?.name} />
 					<input type="hidden" name="eventId" value={data?.eventData?.id} />
 					<input type="hidden" name="description" value={description} />
-					<p class="p-2 text-left border w-96 dark:prose-invert prose ">
+					<div
+						class="p-2 text-left border border-gray-600 dark:prose-invert prose w-full max-w-none "
+					>
 						{@html marked(description, { mangle: false, headerIds: false })}
-					</p>
+					</div>
 					{#if data?.isManager}
 						<button
-							class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+							class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-yellow-400 hover:rounded-lg transition-all p-1"
 							on:click|preventDefault={() => (editDesc = !editDesc)}
-							>{!editDesc ? 'Edit description' : 'Stop editing'}</button
+							>{!editDesc ? 'Edit' : 'Done'}</button
 						>
 					{/if}
 				</div>
@@ -191,14 +243,14 @@
 
 	<h2 class="text-2xl mt-10 text-center">Positions</h2>
 	<div class=" text-center">
-		<div class="grid grid-cols-3 border-b mb-2">
+		<div class="grid grid-cols-3 border-b border-gray-600 mb-2">
 			<span class="text-lg font-bold">Actions</span>
 			<span class="text-lg font-bold">Title</span>
 			<span class="text-lg font-bold">Compensation</span>
 		</div>
 
 		{#each positions as position, i}
-			<div class="grid grid-cols-3 my-2 border-b pb-2">
+			<div class="grid grid-cols-3 my-2 border-b border-gray-600 pb-2">
 				<div class="flex justify-center flex-wrap items-center gap-2 relative">
 					{#if data.isManager}
 						<button
@@ -289,30 +341,37 @@
 		{#if data?.isManager}
 			<button
 				on:click|preventDefault={() => createPosition()}
-				class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all p-1"
+				class="mt-5 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 hover:rounded-lg transition-all px-1"
 				>Create Position</button
 			>
 
 			<input type="hidden" name="eventId" value={data.eventData.id} />
 		{/if}
 
-		<button formaction="?/updateEvent" class="hover:rounded-lg transition-all mt-4 bg-blue-400 px-4"
+		<button
+			formaction="?/updateEvent"
+			class="hover:rounded-lg transition-all mt-4 bg-gray-300 dark:bg-gray-800 hover:bg-blue-400 px-1 "
 			>Save Changes</button
 		>
 		{#if data?.isManager}
 			{#if showDelete}
 				<button
-					class="hover:rounded-lg transition-all mt-4 bg-red-400 px-4"
+					class="hover:rounded-lg transition-all mt-4 bg-gray-300 dark:bg-gray-800 hover:bg-red-400 px-1 "
 					formaction="?/deleteEvent">DELETE EVENT - ARE YOU SURE?</button
 				>
 			{:else}
 				<button
-					class="hover:rounded-lg transition-all mt-4 bg-red-400 px-4"
+					class="hover:rounded-lg transition-all mt-4 bg-gray-300 dark:bg-gray-800 hover:bg-red-400 px-1 "
 					on:click|preventDefault={() => (showDelete = true)}
 				>
 					Delete Event
 				</button>
 			{/if}
 		{/if}
+		<a
+			href={`/orgs/${data?.org?.id}`}
+			class="hover:rounded-lg transition-all mt-4 bg-gray-300 dark:bg-gray-800 hover:bg-yellow-400 px-1 py-0.5"
+			>Back</a
+		>
 	</div>
 </form>

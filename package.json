@@ -55,6 +55,7 @@
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/marked": "^5.0.0",
 		"dayjs": "^1.11.7",
+		"ics": "^3.2.0",
 		"marked": "^5.1.0",
 		"sass": "^1.59.2"
 	}

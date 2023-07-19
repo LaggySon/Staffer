@@ -84,7 +84,11 @@
 
 		{#each events as event}
 			<a href={`/orgs/${org?.id}/${event?.id}`}>
-				<Event name={event.name} location={event.location} date={String(event.date)} />
+				<Event
+					name={event.name}
+					location={event.location}
+					date={dayjs(event.startAt).format('MM/DD/YYYY @ HH:mm z')}
+				/>
 			</a>
 		{/each}
 		{#if data?.isManager}
@@ -116,7 +120,7 @@
 						<input
 							class="bg-transparent border-b outline-none"
 							type="datetime-local"
-							name="date"
+							name="startAt"
 							required
 						/>
 					</div>

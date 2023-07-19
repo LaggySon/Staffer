@@ -17,6 +17,6 @@
 	<span class=" h-10 flex items-center justify-center "><span class="z-10">{location}</span></span>
 	<span class=" h-10 flex items-center justify-center "><span class="z-10">{name}</span></span>
 	<span class=" h-10 flex items-center justify-center ">
-		<span class="z-10">{dayjs(date).format('MM-DD-YYYY @ HH:mm z')}</span>
+		<span class="z-10">{date}</span>
 	</span>
 </div>
