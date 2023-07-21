@@ -100,10 +100,6 @@
 		}
 	};
 
-	$: startTime = dayjs(data?.eventData?.startAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
-
-	$: endTime = dayjs(data?.eventData?.endAt).tz(dayjs.tz.guess()).format('YYYYMMDDTHHmmssZ');
-
 	const getUrl = (site: string) => {
 		return help.buildUrl(
 			{
