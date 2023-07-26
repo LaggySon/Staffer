@@ -22,10 +22,22 @@ export const load = async ({ params, parent }: any) => {
 			}
 		},
 		include: {
-			positions: true
+			positions: true,
+			Organization: true
 		}
 	});
 
+	let fOrgs = await prisma.orgOnFreelancer.findMany({
+		where: {
+			userId
+		},
+		include: {
+			organization: true
+		}
+	});
+
+	const orgs = fOrgs.map((o) => o.organization);
+
 	console.log(events);
-	return { user, events };
+	return { user, events, orgs };
 };
