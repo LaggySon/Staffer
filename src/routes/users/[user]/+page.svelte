@@ -22,39 +22,46 @@
 			<p class="text-center text-3xl">{data?.user?.name}</p>
 		</div>
 		<div class="grid grid-rows-5 gap-4 col-span-1 ">
-			<div class="row-span-2 border rounded-lg p-2">
-				{#each socials as social}
-					<p class="text-sm">{social.site}: {social.handle}</p>
-				{/each}
-			</div>
-			<div class="row-span-3  border rounded-lg p-2">
-				<p>{user?.contactInfo}</p>
-			</div>
-
-			<a
-				href={`/users/${user?.id}/edit`}
-				class="hover:bg-green-400  text-gray-300 hover:rounded-lg transition-all text-center p-1"
-				>Edit</a
-			>
+			{#if socials.length > 0}
+				<div class="row-span-2 border rounded-lg p-2">
+					{#each socials as social}
+						<p class="text-sm">{social.site}: {social.handle}</p>
+					{/each}
+				</div>
+			{/if}
+			{#if user?.contactInfo && user?.contactInfo?.length > 0}
+				<div class="row-span-3  border rounded-lg p-2">
+					<p>{user?.contactInfo}</p>
+				</div>
+			{/if}
+			{#if data?.session?.user?.email === user?.email}
+				<a
+					href={`/users/${user?.id}/edit`}
+					class="hover:bg-green-400  text-gray-300 hover:rounded-lg transition-all text-center p-1"
+					>Edit</a
+				>
+			{/if}
 		</div>
 	</div>
 
 	<div class="flex w-full col-span-3 flex-col gap-4 col-start-2">
-		<div class="p-2 text-left border rounded-lg dark:prose-invert prose w-full max-w-none ">
-			{@html marked(String(bio), { mangle: false, headerIds: false })}
-		</div>
+		{#if user?.biography && user?.biography.length > 0}
+			<div class="p-2 text-left border rounded-lg dark:prose-invert prose w-full max-w-none ">
+				{@html marked(String(bio), { mangle: false, headerIds: false })}
+			</div>
+		{/if}
 
 		<div class="col-span-3  ">
 			<p class="text-center text-2xl mb-2">Organizations</p>
 			<div class="flex gap-4 justify-center">
 				{#each orgs as org}
-					<div>
+					<div class="flex flex-col items-center">
 						<img
 							src={org?.logo === '' ? '/android-chrome-512x512.png' : org?.logo}
 							alt=""
-							class="h-20"
+							class="h-20 w-20"
 						/>
-						<p class="text-center">{org.name}</p>
+						<p class="text-center w-20 line-clamp-2 text-sm" title={org.name}>{org.name}</p>
 					</div>
 				{/each}
 			</div>
