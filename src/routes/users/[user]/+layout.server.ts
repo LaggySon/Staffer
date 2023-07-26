@@ -38,6 +38,11 @@ export const load = async ({ params, parent }: any) => {
 
 	const orgs = fOrgs.map((o) => o.organization);
 
-	console.log(events);
-	return { user, events, orgs };
+	const socials = await prisma.social.findMany({
+		where: {
+			userId
+		}
+	});
+
+	return { user, events, orgs, socials };
 };
