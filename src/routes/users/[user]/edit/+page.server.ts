@@ -3,6 +3,22 @@ import { PrismaClient } from '@prisma/client';
 import type { Event } from '@prisma/client';
 const prisma = new PrismaClient();
 
+export const load = async ({ params, parent }: any) => {
+	const { session } = await parent();
+
+	const getId = await prisma.user.findUnique({
+		where: {
+			email: session.user.email
+		}
+	});
+
+	const userId = getId?.id;
+
+	if (userId !== params.user) {
+		throw redirect(302, `/users/${params.user}`);
+	}
+};
+
 export const actions = {
 	update: async ({ params, request, parent }: any) => {
 		const data = await request.formData();
