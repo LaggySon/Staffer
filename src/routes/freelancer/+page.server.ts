@@ -3,6 +3,13 @@ const prisma = new PrismaClient();
 
 export const load = async ({ parent }: any) => {
 	const { session } = await parent();
+	const userEmail = session.user.email;
+	const user = await prisma.user.findUnique({
+		where: {
+			email: userEmail
+		}
+	});
+	const userId = user?.id;
 	if (session) {
 		const orgs = await prisma.orgOnFreelancer.findMany({
 			where: {
@@ -16,11 +23,12 @@ export const load = async ({ parent }: any) => {
 			})
 		);
 		return {
-			orgsList
+			orgsList,
+			userId
 		};
 	} else {
 		const orgsList: any = [];
-		return { orgsList };
+		return { orgsList, userId };
 	}
 };
 

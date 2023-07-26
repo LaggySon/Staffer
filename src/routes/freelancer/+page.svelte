@@ -9,7 +9,9 @@
 </script>
 
 {#if $page?.data?.session?.user?.image}
-	<img src={$page?.data?.session?.user?.image} alt="" height="100" width="100" class="mx-auto" />
+	<a href={`/users/${data?.userId}`}>
+		<img src={$page?.data?.session?.user?.image} alt="" height="100" width="100" class="mx-auto" />
+	</a>
 {/if}
 <h1 class="text-center text-3xl">Welcome, {$page?.data?.session?.user?.name ?? 'Freelancer'}!</h1>
 <ul class="text-center">
