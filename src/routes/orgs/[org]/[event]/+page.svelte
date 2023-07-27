@@ -90,9 +90,17 @@
 	let showDelete = false;
 	let editDesc = false;
 	let location = data?.eventData?.location;
-	let startAt = dayjs(data?.eventData?.startAt).format('YYYY-MM-DDTHH:mm');
-	let endAt = dayjs(data?.eventData?.endAt).format('YYYY-MM-DDTHH:mm');
+	const localOffsetInMinutes = new Date().getTimezoneOffset();
+
+	let startAt = dayjs(data?.eventData?.startAt)
+		.add(localOffsetInMinutes, 'minutes')
+		.format('YYYY-MM-DDTHH:mm');
+	let endAt = dayjs(data?.eventData?.endAt)
+		.add(localOffsetInMinutes, 'minutes')
+		.format('YYYY-MM-DDTHH:mm');
 	let title = data?.eventData?.name;
+
+	console.log(startAt);
 
 	const handleDelete = () => {
 		if (!showDelete) {

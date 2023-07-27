@@ -36,11 +36,7 @@
 
 <div class="flex flex-wrap justify-center items-center mb-10 gap-4">
 	<a href={`/orgs/${data?.org?.id}`} class="flex justify-center"
-		><img
-			src={data.org?.logo === '' ? '/android-chrome-512x512.png' : data.org?.logo}
-			alt=""
-			class="h-[4em]"
-		/></a
+		><img src={data.org?.logo === '' ? '/org.png' : data.org?.logo} alt="" class="h-[4em]" /></a
 	>
 
 	<h1 class=" text-xl ">Managing {name === '' ? 'a new organization' : name}</h1>

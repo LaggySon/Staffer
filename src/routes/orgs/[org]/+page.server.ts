@@ -26,8 +26,8 @@ export const actions = {
 			data: {
 				name: name,
 				location: location,
-				startAt: dayjs(startAt).toDate(),
-				endAt: dayjs(startAt).toDate(),
+				startAt: dayjs.utc(startAt).toDate(),
+				endAt: dayjs.utc(startAt).toDate(),
 
 				Organization: {
 					connect: {
