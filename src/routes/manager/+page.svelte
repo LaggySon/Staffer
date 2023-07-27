@@ -31,11 +31,7 @@
 			title={org.name}
 		>
 			<a href={`/orgs/${org?.id}`} class="flex flex-col items-center justify-center gap-2"
-				><img
-					src={org?.logo === '' ? '/android-chrome-512x512.png' : org?.logo}
-					alt=""
-					class="h-32 w-32"
-				/></a
+				><img src={org?.logo === '' ? '/org.png' : org?.logo} alt="" class="h-32 w-32" /></a
 			>
 		</li>
 	{/each}

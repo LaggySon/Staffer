@@ -22,8 +22,16 @@ export const load = async ({ parent }: any) => {
 				return await prisma.organization.findUnique({ where: { id: org.organizationId } });
 			})
 		);
+
+		const allOrgs = await Promise.all(await prisma.organization.findMany({}));
+
+		const ids = orgsList.map((org) => org?.id);
+
+		const filteredOrgs = allOrgs.filter((org) => !ids.includes(org.id));
+
 		return {
 			orgsList,
+			filteredOrgs,
 			userId
 		};
 	} else {

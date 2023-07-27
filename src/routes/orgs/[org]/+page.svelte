@@ -20,11 +20,7 @@
 	<div class="text-3xl flex justify-center items-center gap-2 flex-col mb-10 ">
 		<div class="text-3xl flex justify-center items-center gap-2 flex-col">
 			<a href={`/orgs/${data?.org?.name}`}
-				><img
-					src={org?.logo === '' ? '/android-chrome-512x512.png' : org?.logo}
-					alt=""
-					class="h-[4em]"
-				/></a
+				><img src={org?.logo === '' ? '/org.png' : org?.logo} alt="" class="h-[4em]" /></a
 			>
 
 			<h1 class="text-center ">{org?.name}</h1>

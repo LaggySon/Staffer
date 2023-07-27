@@ -56,11 +56,7 @@
 			<div class="flex gap-4 justify-center">
 				{#each orgs as org}
 					<div class="flex flex-col items-center">
-						<img
-							src={org?.logo === '' ? '/android-chrome-512x512.png' : org?.logo}
-							alt=""
-							class="h-20 w-20"
-						/>
+						<img src={org?.logo === '' ? '/org.png' : org?.logo} alt="" class="h-20 w-20" />
 						<p class="text-center w-20 line-clamp-2 text-sm" title={org.name}>{org.name}</p>
 					</div>
 				{/each}
@@ -70,9 +66,7 @@
 		{#each events as event}
 			<div class="col-span-3 border rounded-lg p-2  flex gap-4">
 				<img
-					src={event.Organization?.logo === ''
-						? '/android-chrome-512x512.png'
-						: event.Organization?.logo}
+					src={event.Organization?.logo === '' ? '/org.png' : event.Organization?.logo}
 					alt=""
 					class="h-14"
 				/>
