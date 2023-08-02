@@ -3,6 +3,8 @@ import { redirect } from '@sveltejs/kit';
 import type { Position } from '@prisma/client';
 import dayjs from 'dayjs';
 const prisma = new PrismaClient();
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export const actions = {
 	createEvent: async ({ request }: any) => {
