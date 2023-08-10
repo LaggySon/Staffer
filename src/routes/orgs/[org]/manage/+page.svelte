@@ -176,9 +176,9 @@
 						{/if}
 					</div>
 
-					<p class="p-2 h-full flex gap-2 items-center w-full">
+					<a href={`/users/${freelancer.id}`} class="p-2 h-full flex gap-2 items-center w-full">
 						<img src={freelancer.image} class="h-8" />{freelancer.name}
-					</p>
+					</a>
 					<p class="p-2 h-full flex justify-center items-center">{freelancer.title}</p>
 				</form>
 			{/each}
