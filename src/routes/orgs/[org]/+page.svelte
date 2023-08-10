@@ -1,10 +1,14 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
 	import Event from './Event.svelte';
+	import { page } from '$app/stores';
 	export let data;
+
 	const events = data.events;
 	const org: any = data.org;
 
 	let viewCode = false;
+	let showCreateEvent = false;
 
 	function showCode() {
 		viewCode = !viewCode;
@@ -15,7 +19,9 @@
 <div class="lg:grid lg:grid-cols-4 lg:gap-4">
 	<div class="text-3xl flex justify-center items-center gap-2 flex-col mb-10 ">
 		<div class="text-3xl flex justify-center items-center gap-2 flex-col">
-			<a href={`/orgs/${data?.org?.name}`}><img src={org?.logo} alt="" class="h-[4em]" /></a>
+			<a href={`/orgs/${data?.org?.name}`}
+				><img src={org?.logo === '' ? '/org.png' : org?.logo} alt="" class="h-[4em]" /></a
+			>
 
 			<h1 class="text-center ">{org?.name}</h1>
 			<div class="w-full flex flex-wrap flex-row justify-center [&>*]:m-2 [&>*]:p-2 [&>*]:w-full">
@@ -35,7 +41,7 @@
 			</div>
 			{#if data.isManager}
 				<div
-					class="text-sm text-center cursor-pointer bg-slate-300 dark:bg-slate-800 hover:rounded-lg transition-all p-1"
+					class="text-sm text-center cursor-pointer bg-gray-300 dark:bg-gray-800 hover:rounded-lg transition-all p-1"
 					on:keydown={() => showCode()}
 					on:click={() => showCode()}
 				>
@@ -52,6 +58,15 @@
 					class="bg-red-400 text-sm text-center cursor-pointer hover:rounded-lg transition-all p-1"
 					href={`/orgs/${org?.id}/manage`}>Manage {org?.name}</a
 				>
+			{:else}
+				<form method="post">
+					<input type="hidden" name="userEmail" value={$page?.data?.session?.user?.email} />
+					<input type="hidden" name="orgId" value={data?.org?.id} />
+					<button
+						class="bg-red-400 text-sm text-center cursor-pointer hover:rounded-lg transition-all p-1"
+						formaction="?/leaveOrg">Leave Org</button
+					>
+				</form>
 			{/if}
 		</div>
 	</div>
@@ -65,17 +80,51 @@
 
 		{#each events as event}
 			<a href={`/orgs/${org?.id}/${event?.id}`}>
-				<Event name={event.name} location={event.location} date={String(event.date)} />
+				<Event
+					name={event.name}
+					location={event.location}
+					date={dayjs(event.startAt).format('MM/DD/YYYY @ HH:mm z')}
+				/>
 			</a>
 		{/each}
 		{#if data?.isManager}
 			<form method="POST">
 				<input type="hidden" name="orgId" value={org?.id} />
-				<button
-					formaction="?/createEvent"
-					class="w-full z-0 bg-slate-300 cursor-pointer dark:bg-slate-800 transition-all overflow-hidden before:w-0 before:bg-blue-400 before:absolute hover:before:w-full before:h-10 before:transition-all before:duration-300 before:left-1/2 hover:before:left-0"
-					><span class="z-20">+</span></button
-				>
+
+				{#if !showCreateEvent}
+					<button
+						on:click={() => (showCreateEvent = !showCreateEvent)}
+						class="w-full z-0 bg-slate-300 cursor-pointer dark:bg-slate-800 transition-all overflow-hidden before:w-0 before:bg-blue-400 before:absolute hover:before:w-full before:h-10 before:transition-all before:duration-300 before:left-1/2 hover:before:left-0"
+						><span class="z-20">+</span></button
+					>
+				{:else}
+					<div class="w-full grid grid-cols-3 gap-2">
+						<input
+							class="bg-transparent border-b outline-none text-center"
+							type="text"
+							name="location"
+							id="newlocation"
+							required
+						/>
+						<input
+							class="bg-transparent border-b outline-none text-center"
+							type="text"
+							name="name"
+							id="newname"
+							required
+						/>
+						<input
+							class="bg-transparent border-b outline-none"
+							type="datetime-local"
+							name="startAt"
+							required
+						/>
+					</div>
+					<button
+						class="bg-slate-300 dark:bg-slate-800  cursor-pointer hover:bg-blue-400 transition-all hover:rounded-lg p-1 "
+						formaction="?/createEvent">Create</button
+					>
+				{/if}
 			</form>
 		{/if}
 	</div>

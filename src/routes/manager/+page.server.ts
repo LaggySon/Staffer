@@ -2,12 +2,27 @@ import { PrismaClient } from '@prisma/client';
 import { redirect } from '@sveltejs/kit';
 const prisma = new PrismaClient();
 
-export const load = async () => {
-	const users = await prisma.user.findMany();
+export const load = async ({ parent }: any) => {
+	const { session } = await parent();
+	if (session) {
+		const orgs = await prisma.orgOnManager.findMany({
+			where: {
+				user: { email: session?.user?.email }
+			}
+		});
 
-	return {
-		users
-	};
+		const orgsList = await Promise.all(
+			orgs.map(async (org) => {
+				return await prisma.organization.findUnique({ where: { id: org.organizationId } });
+			})
+		);
+		return {
+			orgsList
+		};
+	} else {
+		const orgsList: any = [];
+		return { orgsList };
+	}
 };
 
 export const actions = {
@@ -33,12 +48,14 @@ export const actions = {
 	createOrg: async ({ request }: any) => {
 		const data = await request.formData();
 		const userEmail = data.get('userEmail');
+		const name = data.get('name');
+		const desc = data.get('description');
 
 		const newOrg = await prisma.organization.create({
 			data: {
-				name: '',
+				name,
 				logo: '',
-				description: '',
+				description: desc,
 				contactInfo: ''
 			}
 		});
